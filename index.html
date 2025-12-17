@@ -5,6 +5,248 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Today’s Walk</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    /* Base styles with fallback for when Tailwind doesn't load */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 50%, #fff1f2 100%);
+      color: #881337;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      line-height: 1.6;
+    }
+    
+    main {
+      max-width: 38rem;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 1.5rem;
+      box-shadow: 0 25px 50px -12px rgba(136, 19, 55, 0.15), 0 10px 20px -5px rgba(251, 113, 133, 0.1);
+      padding: 2rem;
+      border: 2px solid rgba(251, 191, 36, 0.3);
+    }
+    
+    section {
+      background: linear-gradient(to bottom right, #fdf2f8, #fff7ed);
+      border: 1px solid rgba(253, 230, 138, 0.6);
+      border-radius: 1rem;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 8px rgba(136, 19, 55, 0.04);
+    }
+    
+    h1 { 
+      font-size: 2.25rem; 
+      font-weight: 700; 
+      text-align: center; 
+      color: #be123c; 
+      margin: 0.75rem 0; 
+      letter-spacing: -0.025em;
+      text-shadow: 0 2px 4px rgba(190, 18, 60, 0.1);
+    }
+    
+    h2 { 
+      font-size: 0.8125rem; 
+      text-transform: uppercase; 
+      letter-spacing: 0.1em; 
+      color: #f43f5e; 
+      margin-bottom: 1rem; 
+      font-weight: 600;
+    }
+    
+    p { margin-bottom: 0.5rem; color: #881337; line-height: 1.7; }
+    
+    button {
+      padding: 0.625rem 1.25rem;
+      border-radius: 0.625rem;
+      border: 1.5px solid rgba(253, 230, 138, 0.5);
+      background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+      color: #881337;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      margin: 0.25rem;
+      box-shadow: 0 2px 4px rgba(136, 19, 55, 0.08);
+    }
+    
+    button:hover {
+      background: linear-gradient(135deg, #fbcfe8 0%, #f9a8d4 100%);
+      box-shadow: 0 6px 12px rgba(136, 19, 55, 0.15), 0 2px 4px rgba(251, 113, 133, 0.1);
+      transform: translateY(-1px);
+      border-color: rgba(251, 191, 36, 0.7);
+    }
+    
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(136, 19, 55, 0.1);
+    }
+    
+    textarea {
+      width: 100%;
+      padding: 1rem;
+      border-radius: 0.875rem;
+      border: 1.5px solid rgba(253, 230, 138, 0.5);
+      background: rgba(255, 255, 255, 0.9);
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      font-family: inherit;
+      resize: vertical;
+      transition: all 0.25s ease;
+      box-shadow: inset 0 2px 4px rgba(136, 19, 55, 0.03);
+    }
+    
+    textarea:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.3), inset 0 2px 4px rgba(136, 19, 55, 0.05);
+      border-color: rgba(251, 191, 36, 0.8);
+      background: #ffffff;
+    }
+    
+    .hidden { display: none !important; }
+    .text-center { text-align: center; }
+    .text-xs { font-size: 0.75rem; }
+    .text-sm { font-size: 0.875rem; }
+    .text-lg { font-size: 1.125rem; }
+    .font-medium { font-weight: 500; }
+    .font-semibold { font-weight: 600; }
+    .italic { font-style: italic; }
+    .underline { text-decoration: underline; }
+    .uppercase { text-transform: uppercase; }
+    
+    .space-y-2 > * + * { margin-top: 0.5rem; }
+    .space-y-3 > * + * { margin-top: 0.75rem; }
+    .space-y-6 > * + * { margin-top: 1.5rem; }
+    
+    .flex { display: flex; }
+    .flex-wrap { flex-wrap: wrap; }
+    .flex-1 { flex: 1; }
+    .items-baseline { align-items: baseline; }
+    .items-start { align-items: flex-start; }
+    .items-center { align-items: center; }
+    .justify-between { justify-content: space-between; }
+    .gap-2 { gap: 0.5rem; }
+    .gap-3 { gap: 0.75rem; }
+    
+    .grid { display: grid; }
+    .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+    @media (min-width: 640px) {
+      .sm\\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    
+    .rounded-full { border-radius: 9999px; }
+    .rounded-xl { border-radius: 0.75rem; }
+    
+    .border-t { border-top: 1px solid #fef3c7; }
+    .pt-2 { padding-top: 0.5rem; }
+    .mt-1 { margin-top: 0.25rem; }
+    .mt-2 { margin-top: 0.5rem; }
+    .p-3 { padding: 0.75rem; }
+    .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+    .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+    .px-4 { padding-left: 1rem; padding-right: 1rem; }
+    .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+    
+    .smooth-transition { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+    .fade-in { animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+    @keyframes fadeIn { 
+      from { opacity: 0; transform: translateY(16px); } 
+      to { opacity: 1; transform: translateY(0); } 
+    }
+    
+    /* Enhanced focus states */
+    button:focus-visible {
+      outline: 2px solid #f43f5e;
+      outline-offset: 2px;
+    }
+    
+    /* Better hover states for interactive elements */
+    .delete-entry-btn {
+      font-size: 1.25rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      opacity: 0.6;
+    }
+    
+    .delete-entry-btn:hover {
+      opacity: 1;
+      transform: scale(1.15);
+      color: #be123c !important;
+    }
+    
+    .text-rose-300 { color: #fda4af; }
+    .text-rose-400 { color: #fb7185; }
+    .text-rose-500 { color: #f43f5e; }
+    .text-rose-600 { color: #e11d48; }
+    .text-rose-700 { color: #be123c; }
+    .text-rose-800 { color: #881337; }
+    
+    .bg-white { background: #ffffff; }
+    .bg-pink-50 { background: #fdf2f8; }
+    .bg-pink-100 { background: #fce7f3; }
+    .bg-pink-200 { background: #fbcfe8; }
+    
+    .border-amber-100 { border-color: #fef3c7; }
+    .border-amber-200 { border-color: #fde68a; }
+    .border-amber-300 { border-color: #fbbf24; }
+    
+    /* Additional utilities */
+    .bg-white\/70 { 
+      background: rgba(255, 255, 255, 0.8); 
+      box-shadow: 0 2px 6px rgba(136, 19, 55, 0.06);
+    }
+    .bg-white\/80 { 
+      background: rgba(255, 255, 255, 0.9); 
+      box-shadow: 0 2px 6px rgba(136, 19, 55, 0.06);
+    }
+    .leading-relaxed { line-height: 1.7; }
+    
+    /* Enhanced header styling */
+    header p {
+      font-weight: 400;
+      letter-spacing: 0.01em;
+    }
+    
+    /* Better separation for sections */
+    section:last-of-type {
+      margin-bottom: 0;
+    }
+    
+    /* Enhanced scripture display */
+    #scripture-text {
+      font-size: 1.125rem;
+      font-weight: 500;
+      line-height: 1.75;
+      color: #9f1239;
+    }
+    
+    /* Enhanced verse references */
+    #scripture-ref, #matched-ref {
+      font-style: italic;
+      font-weight: 500;
+      opacity: 0.85;
+    }
+    
+    /* Better journal result styling */
+    #journal-result {
+      border: 1.5px solid rgba(251, 191, 36, 0.4);
+      background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.95), rgba(255, 247, 237, 0.8));
+    }
+    
+    /* Improved footer */
+    footer {
+      font-size: 0.8125rem;
+      opacity: 0.7;
+      font-weight: 400;
+    }
+  </style>
 </head>
 <body class="min-h-screen bg-gradient-to-b from-pink-50 via-pink-100 to-white text-rose-900 flex items-center justify-center px-4">
 
@@ -21,10 +263,10 @@
     <section class="bg-pink-50 border border-amber-200 rounded-xl p-4 space-y-3">
       <h2 class="text-sm uppercase tracking-wide text-rose-400">How are you feeling?</h2>
       <div class="flex flex-wrap gap-2">
-        <button data-mood="peace" class="mood-btn px-3 py-1 rounded-full bg-white border border-amber-300 text-sm hover:bg-pink-50 transition">Peaceful</button>
-        <button data-mood="tired" class="mood-btn px-3 py-1 rounded-full bg-white border border-amber-300 text-sm hover:bg-pink-50 transition">Tired</button>
-        <button data-mood="anxious" class="mood-btn px-3 py-1 rounded-full bg-white border border-amber-300 text-sm hover:bg-pink-50 transition">Anxious</button>
-        <button data-mood="hopeful" class="mood-btn px-3 py-1 rounded-full bg-white border border-amber-300 text-sm hover:bg-pink-50 transition">Hopeful</button>
+        <button data-mood="peace" class="mood-btn px-3 py-1 rounded-full bg-white border border-amber-300 text-sm hover:bg-pink-50 hover:shadow-md smooth-transition">Peaceful</button>
+        <button data-mood="tired" class="mood-btn px-3 py-1 rounded-full bg-white border border-amber-300 text-sm hover:bg-pink-50 hover:shadow-md smooth-transition">Tired</button>
+        <button data-mood="anxious" class="mood-btn px-3 py-1 rounded-full bg-white border border-amber-300 text-sm hover:bg-pink-50 hover:shadow-md smooth-transition">Anxious</button>
+        <button data-mood="hopeful" class="mood-btn px-3 py-1 rounded-full bg-white border border-amber-300 text-sm hover:bg-pink-50 hover:shadow-md smooth-transition">Hopeful</button>
       </div>
       <div class="text-center">
         <button id="reset-mood" class="text-xs text-rose-400 underline hover:text-rose-600">Reset mood</button>
@@ -57,8 +299,8 @@
       <textarea id="journal-entry" rows="5" class="w-full rounded-xl border border-amber-200 bg-white/80 p-3 text-sm leading-relaxed outline-none focus:ring-2 focus:ring-amber-200" placeholder="Write it out. Messy is okay."></textarea>
 
       <div class="flex flex-wrap gap-2">
-        <button id="analyze-journal" class="rounded-xl bg-pink-100 border border-amber-300 hover:bg-pink-200 transition px-4 py-2 text-sm">Find a verse for me</button>
-        <button id="clear-journal" class="rounded-xl bg-white border border-amber-200 hover:bg-pink-50 transition px-4 py-2 text-sm">Clear</button>
+        <button id="analyze-journal" class="rounded-xl bg-pink-100 border border-amber-300 hover:bg-pink-200 hover:shadow-md smooth-transition px-4 py-2 text-sm">Find a verse for me</button>
+        <button id="clear-journal" class="rounded-xl bg-white border border-amber-200 hover:bg-pink-50 hover:shadow-sm smooth-transition px-4 py-2 text-sm">Clear</button>
       </div>
 
       <section id="journal-result" class="rounded-xl bg-white/70 border border-amber-200 p-4 space-y-2 hidden">
@@ -90,13 +332,22 @@
       </section>
     </section>
 
+    <!-- Journal History -->
+    <section id="journal-history-section" class="bg-pink-50 border border-amber-200 rounded-xl p-4 space-y-3 hidden">
+      <div class="flex items-baseline justify-between gap-3">
+        <h2 class="text-sm uppercase tracking-wide text-rose-400">Past Entries</h2>
+        <button id="toggle-history" class="text-xs text-rose-500 underline hover:text-rose-700">Show history</button>
+      </div>
+      <div id="journal-history" class="space-y-3 hidden"></div>
+    </section>
+
     <!-- Prayer Buttons -->
     <section class="space-y-3">
       <h2 class="text-sm uppercase tracking-wide text-rose-400 text-center">Choose a prayer</h2>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <button data-prayer="overwhelmed" class="prayer-btn rounded-xl bg-pink-100 border border-amber-300 hover:bg-pink-200 transition p-3 text-sm">I feel overwhelmed</button>
-        <button data-prayer="numb" class="prayer-btn rounded-xl bg-pink-100 border border-amber-300 hover:bg-pink-200 transition p-3 text-sm">I feel numb</button>
-        <button data-prayer="grateful" class="prayer-btn rounded-xl bg-pink-100 border border-amber-300 hover:bg-pink-200 transition p-3 text-sm">I feel grateful</button>
+        <button data-prayer="overwhelmed" class="prayer-btn rounded-xl bg-pink-100 border border-amber-300 hover:bg-pink-200 hover:shadow-md smooth-transition p-3 text-sm">I feel overwhelmed</button>
+        <button data-prayer="numb" class="prayer-btn rounded-xl bg-pink-100 border border-amber-300 hover:bg-pink-200 hover:shadow-md smooth-transition p-3 text-sm">I feel numb</button>
+        <button data-prayer="grateful" class="prayer-btn rounded-xl bg-pink-100 border border-amber-300 hover:bg-pink-200 hover:shadow-md smooth-transition p-3 text-sm">I feel grateful</button>
       </div>
     </section>
 
@@ -246,6 +497,7 @@
       const matchedPrayer = document.getElementById('matched-prayer');
 
       const STORAGE_KEY = 'faithwalk_journal_v1';
+      const HISTORY_KEY = 'faithwalk_journal_history_v1';
 
       const journalMap = {
         anxious: {
@@ -355,6 +607,7 @@
         if (matchedPrayer) matchedPrayer.textContent = cfg.prayer;
 
         result.classList.remove('hidden');
+        result.classList.add('fade-in');
       }
 
       // Restore saved journal entry on load
@@ -367,14 +620,140 @@
         }
       }
 
-      // Analyze button: save locally + match + display
+      // Journal history functions
+      function saveJournalEntry(text, emotionKey, emotionLabel, score) {
+        try {
+          const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+          const cfg = journalMap[emotionKey];
+          const newEntry = {
+            id: Date.now(),
+            date: new Date().toISOString(),
+            text: text,
+            emotion: emotionLabel,
+            emotionKey: emotionKey,
+            score: score,
+            verse: cfg?.verse || '',
+            ref: cfg?.ref || '',
+            story: cfg?.story || '',
+            help: cfg?.help || '',
+            prayer: cfg?.prayer || ''
+          };
+          history.unshift(newEntry); // Add to beginning
+          // Keep only last 20 entries
+          if (history.length > 20) history.length = 20;
+          localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+          updateHistoryDisplay();
+        } catch (e) {
+          console.error('Failed to save journal entry:', e);
+        }
+      }
+
+      function deleteJournalEntry(id) {
+        try {
+          const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+          const filtered = history.filter(e => e.id !== id);
+          localStorage.setItem(HISTORY_KEY, JSON.stringify(filtered));
+          updateHistoryDisplay();
+        } catch (e) {
+          console.error('Failed to delete entry:', e);
+        }
+      }
+
+      function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      function formatDate(isoDate) {
+        const date = new Date(isoDate);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+        
+        // Handle future dates (clock skew)
+        if (diffMs < 0) return 'Just now';
+        
+        if (diffMins < 60) return diffMins < 1 ? 'Just now' : `${diffMins} mins ago`;
+        if (diffHours < 24) return diffHours === 1 ? '1 hour ago' : `${diffHours} hours ago`;
+        if (diffDays < 7) return diffDays === 1 ? 'Yesterday' : `${diffDays} days ago`;
+        
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      }
+
+      function updateHistoryDisplay() {
+        const historyContainer = document.getElementById('journal-history');
+        const historySection = document.getElementById('journal-history-section');
+        if (!historyContainer || !historySection) return;
+
+        try {
+          const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+          
+          if (history.length === 0) {
+            historySection.classList.add('hidden');
+            return;
+          }
+
+          historySection.classList.remove('hidden');
+          
+          historyContainer.innerHTML = history.map(entry => `
+            <div class="bg-white/70 border border-amber-200 rounded-xl p-3 space-y-2 fade-in">
+              <div class="flex justify-between items-start gap-2">
+                <div class="flex-1">
+                  <p class="text-xs text-rose-400">${escapeHtml(formatDate(entry.date))}</p>
+                  <p class="text-sm mt-1 text-rose-800">${escapeHtml(entry.text.substring(0, 100))}${entry.text.length > 100 ? '...' : ''}</p>
+                </div>
+                <button data-delete-id="${entry.id}" class="delete-entry-btn text-rose-400 hover:text-rose-600 text-xs">×</button>
+              </div>
+              <div class="border-t border-amber-100 pt-2 space-y-1">
+                <p class="text-xs"><span class="text-rose-500">Feeling:</span> <span class="font-medium">${escapeHtml(entry.emotion)}</span></p>
+                <p class="text-xs text-rose-700">${escapeHtml(entry.verse)} <span class="text-rose-400">${escapeHtml(entry.ref)}</span></p>
+              </div>
+            </div>
+          `).join('');
+        } catch (e) {
+          console.error('Failed to display history:', e);
+        }
+      }
+
+      // Toggle history visibility
+      const toggleHistoryBtn = document.getElementById('toggle-history');
+      const historyDisplay = document.getElementById('journal-history');
+      if (toggleHistoryBtn && historyDisplay) {
+        toggleHistoryBtn.addEventListener('click', () => {
+          const isHidden = historyDisplay.classList.toggle('hidden');
+          toggleHistoryBtn.textContent = isHidden ? 'Show history' : 'Hide history';
+        });
+      }
+
+      // Event delegation for delete buttons (avoids memory leaks)
+      if (historyDisplay) {
+        historyDisplay.addEventListener('click', (e) => {
+          if (e.target.classList.contains('delete-entry-btn')) {
+            const id = parseInt(e.target.dataset.deleteId, 10);
+            if (!isNaN(id)) deleteJournalEntry(id);
+          }
+        });
+      }
+
+      // Load history on page load
+      updateHistoryDisplay();
+
+      // Analyze button: save locally + match + display + save to history
       if (analyzeBtn && entry) {
         analyzeBtn.addEventListener('click', () => {
-          const text = entry.value;
+          const text = entry.value.trim();
+          if (!text) return;
+          
           try { localStorage.setItem(STORAGE_KEY, text); } catch (e) {}
           const { key, score } = analyzeJournal(text);
           if (!key) return;
+          
+          const cfg = journalMap[key];
           showJournalResult(key, score);
+          saveJournalEntry(text, key, cfg.label, score);
         });
       }
 
