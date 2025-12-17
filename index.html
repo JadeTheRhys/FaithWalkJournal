@@ -742,7 +742,7 @@
         <h3>Share Anonymously</h3>
         <p style="font-size: 0.9rem; margin-bottom: 1rem;">Share an insight, prayer request, or word of encouragement with others walking this journey.</p>
         <textarea id="community-share" rows="4" placeholder="What's God teaching you? What do you need prayer for?"></textarea>
-        <button onclick="shareToCommrunity()" class="primary" style="margin-top: 1rem;">Share Anonymously</button>
+        <button onclick="shareToCommunity()" class="primary" style="margin-top: 1rem;">Share Anonymously</button>
         <p style="font-size: 0.8rem; color: var(--earth-light); margin-top: 0.5rem; font-style: italic;">Note: This is a demo. In a full version, this would post to a moderated community space.</p>
       </div>
       
@@ -1068,7 +1068,7 @@
       }
     }
 
-    function shareToCommrunity() {
+    function shareToCommunity() {
       const shareText = document.getElementById('community-share');
       if (shareText && shareText.value.trim()) {
         alert('Thank you for sharing! In a full version, this would post to a moderated community feed.');
