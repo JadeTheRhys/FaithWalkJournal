@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Today’s Walk</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-pink-50 via-pink-100 to-white text-rose-900 flex items-center justify-center px-4">
+
+  <main class="max-w-xl w-full bg-white/80 backdrop-blur rounded-2xl shadow-xl p-6 space-y-6 border border-amber-300">
+
+    <!-- Header -->
+    <header class="text-center space-y-2">
+      <p id="time-greeting" class="text-sm text-rose-500"></p>
+      <h1 class="text-3xl font-semibold tracking-tight text-rose-700">Today’s Walk</h1>
+      <p class="text-rose-400 text-sm">A quiet place to breathe and be with God</p>
+    </header>
+
+    <!-- Mood Selector -->
+    <section class="bg-pink-50 border border-amber-200 rounded-xl p-4 space-y-3">
+      <h2 class="text-sm uppercase tracking-wide text-rose-400">How are you feeling?</h2>
+      <div class="flex flex-wrap gap-2">
+        <button data-mood="peace" class="mood-btn px-3 py-1 rounded-full bg-white border border-amber-300 text-sm hover:bg-pink-50 transition">Peaceful</button>
+        <button data-mood="tired" class="mood-btn px-3 py-1 rounded-full bg-white border border-amber-300 text-sm hover:bg-pink-50 transition">Tired</button>
+        <button data-mood="anxious" class="mood-btn px-3 py-1 rounded-full bg-white border border-amber-300 text-sm hover:bg-pink-50 transition">Anxious</button>
+        <button data-mood="hopeful" class="mood-btn px-3 py-1 rounded-full bg-white border border-amber-300 text-sm hover:bg-pink-50 transition">Hopeful</button>
+      </div>
+      <div class="text-center">
+        <button id="reset-mood" class="text-xs text-rose-400 underline hover:text-rose-600">Reset mood</button>
+      </div>
+    </section>
+
+    <!-- Scripture Card -->
+    <section class="bg-pink-50 border border-amber-200 rounded-xl p-4 space-y-3">
+      <h2 class="text-sm uppercase tracking-wide text-rose-400">Scripture</h2>
+      <p id="scripture-text" class="text-lg leading-relaxed"></p>
+      <p id="scripture-ref" class="text-xs text-rose-300"></p>
+      <button id="next-verse" class="mt-2 text-xs text-rose-500 underline hover:text-rose-700">Show another verse</button>
+    </section>
+
+    <!-- Reflection -->
+    <section class="bg-pink-50 border border-amber-200 rounded-xl p-4 space-y-2">
+      <h2 class="text-sm uppercase tracking-wide text-rose-400">Reflection</h2>
+      <p id="reflection-text" class="leading-relaxed text-rose-800 hidden">What would it look like to pause instead of pushing today?</p>
+      <button id="toggle-reflection" class="text-xs text-rose-500 underline hover:text-rose-700">Show reflection</button>
+    </section>
+
+    <!-- Journal -->
+    <section class="bg-pink-50 border border-amber-200 rounded-xl p-4 space-y-3">
+      <div class="flex items-baseline justify-between gap-3">
+        <h2 class="text-sm uppercase tracking-wide text-rose-400">Journal</h2>
+        <p class="text-[11px] text-rose-400">Saves on this device only (local)</p>
+      </div>
+
+      <label class="block text-sm text-rose-700" for="journal-entry">How are you feeling right now?</label>
+      <textarea id="journal-entry" rows="5" class="w-full rounded-xl border border-amber-200 bg-white/80 p-3 text-sm leading-relaxed outline-none focus:ring-2 focus:ring-amber-200" placeholder="Write it out. Messy is okay."></textarea>
+
+      <div class="flex flex-wrap gap-2">
+        <button id="analyze-journal" class="rounded-xl bg-pink-100 border border-amber-300 hover:bg-pink-200 transition px-4 py-2 text-sm">Find a verse for me</button>
+        <button id="clear-journal" class="rounded-xl bg-white border border-amber-200 hover:bg-pink-50 transition px-4 py-2 text-sm">Clear</button>
+      </div>
+
+      <section id="journal-result" class="rounded-xl bg-white/70 border border-amber-200 p-4 space-y-2 hidden">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <p class="text-sm"><span class="text-rose-500">Matched:</span> <span id="matched-feeling" class="font-medium"></span></p>
+          <p class="text-xs text-rose-400" id="confidence"></p>
+        </div>
+
+        <div class="space-y-1">
+          <p class="text-xs uppercase tracking-wide text-rose-400">Verse</p>
+          <p id="matched-verse" class="text-sm leading-relaxed"></p>
+          <p id="matched-ref" class="text-xs text-rose-400"></p>
+        </div>
+
+        <div class="space-y-1">
+          <p class="text-xs uppercase tracking-wide text-rose-400">Someone in the Bible who felt this</p>
+          <p id="matched-story" class="text-sm leading-relaxed text-rose-800"></p>
+        </div>
+
+        <div class="space-y-1">
+          <p class="text-xs uppercase tracking-wide text-rose-400">How God helps</p>
+          <p id="matched-help" class="text-sm leading-relaxed text-rose-800"></p>
+        </div>
+
+        <div class="space-y-1">
+          <p class="text-xs uppercase tracking-wide text-rose-400">Short prayer</p>
+          <p id="matched-prayer" class="text-sm leading-relaxed"></p>
+        </div>
+      </section>
+    </section>
+
+    <!-- Prayer Buttons -->
+    <section class="space-y-3">
+      <h2 class="text-sm uppercase tracking-wide text-rose-400 text-center">Choose a prayer</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <button data-prayer="overwhelmed" class="prayer-btn rounded-xl bg-pink-100 border border-amber-300 hover:bg-pink-200 transition p-3 text-sm">I feel overwhelmed</button>
+        <button data-prayer="numb" class="prayer-btn rounded-xl bg-pink-100 border border-amber-300 hover:bg-pink-200 transition p-3 text-sm">I feel numb</button>
+        <button data-prayer="grateful" class="prayer-btn rounded-xl bg-pink-100 border border-amber-300 hover:bg-pink-200 transition p-3 text-sm">I feel grateful</button>
+      </div>
+    </section>
+
+    <!-- Prayer Output -->
+    <section id="prayer-output" class="bg-pink-50 border border-amber-200 rounded-xl p-4 space-y-2 hidden">
+      <h2 class="text-sm uppercase tracking-wide text-rose-400">Prayer</h2>
+      <p id="prayer-text" class="leading-relaxed"></p>
+    </section>
+
+    <!-- Evening Prayer (hidden by default) -->
+    <section id="evening-prayer" class="bg-pink-50 border border-amber-200 rounded-xl p-4 space-y-2 hidden">
+      <h2 class="text-sm uppercase tracking-wide text-rose-400">Evening Prayer</h2>
+      <p class="leading-relaxed">God, the day is done. I give You what I didn’t finish, what I couldn’t fix, and what still weighs on me. Hold me in Your peace tonight.</p>
+    </section>
+
+    <footer class="text-center text-xs text-rose-400 pt-2 italic">Built as a quiet space for faith, grace, and softness.</footer>
+
+  </main>
+
+  <script>
+    'use strict';
+
+    (function init() {
+      // Grab elements (guard everything to avoid runtime crashes)
+      const greeting = document.getElementById('time-greeting');
+      const eveningPrayer = document.getElementById('evening-prayer');
+      const verseText = document.getElementById('scripture-text');
+      const verseRef = document.getElementById('scripture-ref');
+      const nextVerseBtn = document.getElementById('next-verse');
+      const toggleReflectionBtn = document.getElementById('toggle-reflection');
+      const reflection = document.getElementById('reflection-text');
+      const prayerOutput = document.getElementById('prayer-output');
+      const prayerText = document.getElementById('prayer-text');
+      const resetMoodBtn = document.getElementById('reset-mood');
+
+      // ---------- TIME-BASED GREETING + EVENING PRAYER ----------
+      const hour = new Date().getHours();
+      if (greeting) {
+        if (hour < 12) greeting.textContent = 'Good morning. God is with you today.';
+        else if (hour < 18) greeting.textContent = 'Good afternoon. Take a breath and rest in Him.';
+        else greeting.textContent = 'Good evening. You made it through today.';
+      }
+      if (eveningPrayer && hour >= 18) eveningPrayer.classList.remove('hidden');
+
+      // ---------- VERSE LOGIC (daily anchor + randomized pool) ----------
+      const dailyVerses = [
+        { text: 'Be still, and know that I am God.', ref: 'Psalm 46:10' },
+        { text: 'The Lord is near to the brokenhearted.', ref: 'Psalm 34:18' },
+        { text: 'Come to Me, all who are weary and burdened.', ref: 'Matthew 11:28' },
+        { text: 'My grace is sufficient for you.', ref: '2 Corinthians 12:9' },
+        { text: 'Trust in the Lord with all your heart.', ref: 'Proverbs 3:5' },
+        { text: 'Those who hope in the Lord will renew their strength.', ref: 'Isaiah 40:31' },
+        { text: 'The Lord bless you and keep you.', ref: 'Numbers 6:24' }
+      ];
+
+      const versePool = [
+        ...dailyVerses,
+        { text: 'Cast all your anxiety on Him because He cares for you.', ref: '1 Peter 5:7' },
+        { text: 'Fear not, for I am with you.', ref: 'Isaiah 41:10' },
+        { text: 'The Lord is my shepherd; I shall not want.', ref: 'Psalm 23:1' },
+        { text: 'The Lord will fight for you; you need only to be still.', ref: 'Exodus 14:14' }
+      ];
+
+      function renderVerse(v) {
+        if (!verseText || !verseRef || !v) return;
+        verseText.textContent = `“${v.text}”`;
+        verseRef.textContent = v.ref;
+      }
+
+      // Daily anchor verse on load
+      const day = new Date().getDay(); // Sun=0 ... Sat=6
+      renderVerse(dailyVerses[day] || dailyVerses[0]);
+
+      // Randomization without immediate repeats
+      let lastIndex = null;
+      if (nextVerseBtn) {
+        nextVerseBtn.addEventListener('click', () => {
+          let idx;
+          do {
+            idx = Math.floor(Math.random() * versePool.length);
+          } while (idx === lastIndex && versePool.length > 1);
+
+          lastIndex = idx;
+          renderVerse(versePool[idx]);
+        });
+      }
+
+      // ---------- REFLECTION TOGGLE ----------
+      if (toggleReflectionBtn && reflection) {
+        toggleReflectionBtn.addEventListener('click', () => {
+          const isHidden = reflection.classList.toggle('hidden');
+          toggleReflectionBtn.textContent = isHidden ? 'Show reflection' : 'Hide reflection';
+        });
+      }
+
+      // ---------- PRAYER BUTTONS ----------
+      const prayers = {
+        overwhelmed: 'God, everything feels heavy right now. Please steady my heart.',
+        numb: 'God, I feel distant and quiet inside. Meet me here.',
+        grateful: 'God, thank You for walking with me today.'
+      };
+
+      document.querySelectorAll('.prayer-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const key = btn.dataset.prayer;
+          if (prayerText) prayerText.textContent = prayers[key] || '';
+          if (prayerOutput) prayerOutput.classList.remove('hidden');
+        });
+      });
+
+      // ---------- MOOD TINTING (safe class replace) ----------
+      const gradients = {
+        peace: ['from-pink-50','via-white','to-white'],
+        tired: ['from-rose-100','via-pink-50','to-white'],
+        anxious: ['from-pink-200','via-pink-100','to-white'],
+        hopeful: ['from-amber-50','via-pink-50','to-white']
+      };
+      const allGradientClasses = Array.from(new Set(Object.values(gradients).flat().concat(['from-pink-50','via-pink-100','to-white'])));
+
+      document.querySelectorAll('.mood-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.body.classList.remove(...allGradientClasses);
+          const mood = btn.dataset.mood;
+          if (gradients[mood]) document.body.classList.add(...gradients[mood]);
+        });
+      });
+
+      if (resetMoodBtn) {
+        resetMoodBtn.addEventListener('click', () => {
+          document.body.classList.remove(...allGradientClasses);
+          document.body.classList.add('from-pink-50','via-pink-100','to-white');
+        });
+      }
+
+      // ---------- JOURNAL "AI" (client-side matcher) + LOCAL SAVE ----------
+      const analyzeBtn = document.getElementById('analyze-journal');
+      const clearBtn = document.getElementById('clear-journal');
+      const entry = document.getElementById('journal-entry');
+      const result = document.getElementById('journal-result');
+
+      const matchedFeeling = document.getElementById('matched-feeling');
+      const confidenceEl = document.getElementById('confidence');
+      const matchedVerse = document.getElementById('matched-verse');
+      const matchedRef = document.getElementById('matched-ref');
+      const matchedStory = document.getElementById('matched-story');
+      const matchedHelp = document.getElementById('matched-help');
+      const matchedPrayer = document.getElementById('matched-prayer');
+
+      const STORAGE_KEY = 'faithwalk_journal_v1';
+
+      const journalMap = {
+        anxious: {
+          label: 'Anxious / afraid',
+          keywords: ['anxious','panic','worried','worry','fear','scared','terrified','nervous','dread','overthinking','overthink','spiral','racing','unsafe'],
+          verse: '“Cast all your anxiety on Him because He cares for you.”',
+          ref: '1 Peter 5:7',
+          story: 'David often wrote from fear and distress (see many Psalms). He brought the fear to God instead of pretending it wasn’t there.',
+          help: 'God invites you to hand Him the mental load piece by piece — not after you “calm down,” but while you’re still shaky.',
+          prayer: 'God, my mind is loud. Hold me steady. I give You what I keep replaying. Help me breathe and trust You in this moment.'
+        },
+        overwhelmed: {
+          label: 'Overwhelmed',
+          keywords: ['overwhelmed','too much','can\'t do this','cant do this','exhausted','burned out','burnt out','stressed','stress','pressure','drowning','tired of','done'],
+          verse: '“Come to Me, all who are weary and burdened, and I will give you rest.”',
+          ref: 'Matthew 11:28',
+          story: 'Moses hit a breaking point under responsibility and cried out to God (Numbers 11). He wasn’t punished for being honest — he was helped.',
+          help: 'God meets you in the weight, not after you prove you can carry it. Rest is an invitation, not a reward.',
+          prayer: 'Jesus, I’m carrying more than I can hold. I come to You. Teach me what to release and what to leave for tomorrow.'
+        },
+        sad: {
+          label: 'Sad / grieving',
+          keywords: ['sad','cry','crying','tears','grief','grieving','heartbroken','broken','depressed','hopeless','empty','mourning','lost'],
+          verse: '“The Lord is near to the brokenhearted and saves the crushed in spirit.”',
+          ref: 'Psalm 34:18',
+          story: 'Hannah poured out her soul in bitterness and tears before the Lord (1 Samuel 1). God saw her privately.',
+          help: 'God doesn’t rush you past grief. He comes close, stays near, and holds what you can’t fix.',
+          prayer: 'God, my heart hurts. Stay close to me. Hold what I can’t carry. Let Your nearness be enough for today.'
+        },
+        angry: {
+          label: 'Angry / frustrated',
+          keywords: ['angry','mad','furious','frustrated','irritated','rage','fed up','why','unfair','resent','resentment'],
+          verse: '“The Lord is compassionate and gracious, slow to anger, abounding in love.”',
+          ref: 'Psalm 103:8',
+          story: 'Jonah was angry with God and said it out loud (Jonah 4). God still engaged him and questioned his heart gently.',
+          help: 'God can handle your honesty. He invites you to bring the heat to Him, then helps you sort what’s underneath it.',
+          prayer: 'God, I’m angry. I don’t want to fake peace. Help me see what’s under this and lead me into truth and calm.'
+        },
+        shame: {
+          label: 'Shame / guilt',
+          keywords: ['ashamed','shame','guilty','guilt','dirty','worthless','failure','i messed up','regret','condemnation'],
+          verse: '“There is now no condemnation for those who are in Christ Jesus.”',
+          ref: 'Romans 8:1',
+          story: 'Peter denied Jesus and wept bitterly — and Jesus restored him (John 21). Failure wasn’t the end of Peter’s story.',
+          help: 'God doesn’t shame you into change; He loves you into healing. Conviction draws you near — condemnation pushes you away.',
+          prayer: 'Jesus, I feel heavy with guilt. I receive Your mercy. Wash me clean and help me walk forward with You.'
+        },
+        lonely: {
+          label: 'Lonely / unseen',
+          keywords: ['lonely','alone','unseen','ignored','no one','nobody','isolated','left out','abandoned','rejected'],
+          verse: '“I will never leave you nor forsake you.”',
+          ref: 'Hebrews 13:5',
+          story: 'Hagar felt unseen in the wilderness, and she named God “the God who sees me” (Genesis 16).',
+          help: 'God notices you in the places other people don’t. His presence is not dependent on someone else showing up.',
+          prayer: 'God who sees me, meet me in this loneliness. Remind me I’m not forgotten. Let Your presence feel real to me.'
+        },
+        grateful: {
+          label: 'Grateful / hopeful',
+          keywords: ['grateful','thankful','blessed','hope','hopeful','joy','peace','calm','good','better'],
+          verse: '“Give thanks to the Lord, for He is good; His love endures forever.”',
+          ref: 'Psalm 136:1',
+          story: 'Mary treasured and pondered the work of God in her heart (Luke 2). Gratitude became a way of remembering.',
+          help: 'God uses gratitude like an anchor — not to deny hard things, but to keep you rooted in what is still true.',
+          prayer: 'God, thank You for the good I can see today. Help me remember Your faithfulness when my feelings shift again.'
+        }
+      };
+
+      function scoreText(text, keywords) {
+        const t = (text || '').toLowerCase();
+        let score = 0;
+        for (const k of keywords) {
+          if (t.includes(k)) score += 1;
+        }
+        return score;
+      }
+
+      function analyzeJournal(text) {
+        const cleaned = (text || '').trim();
+        if (!cleaned) return { key: null, score: 0 };
+
+        let bestKey = null;
+        let bestScore = 0;
+        for (const [key, cfg] of Object.entries(journalMap)) {
+          const s = scoreText(cleaned, cfg.keywords);
+          if (s > bestScore) {
+            bestScore = s;
+            bestKey = key;
+          }
+        }
+
+        if (!bestKey) return { key: 'overwhelmed', score: 0 };
+        return { key: bestKey, score: bestScore };
+      }
+
+      function showJournalResult(key, score) {
+        const cfg = journalMap[key];
+        if (!cfg || !result) return;
+
+        if (matchedFeeling) matchedFeeling.textContent = cfg.label;
+        const conf = score >= 4 ? 'High match' : score >= 2 ? 'Medium match' : 'Gentle guess';
+        if (confidenceEl) confidenceEl.textContent = conf;
+
+        if (matchedVerse) matchedVerse.textContent = cfg.verse;
+        if (matchedRef) matchedRef.textContent = cfg.ref;
+        if (matchedStory) matchedStory.textContent = cfg.story;
+        if (matchedHelp) matchedHelp.textContent = cfg.help;
+        if (matchedPrayer) matchedPrayer.textContent = cfg.prayer;
+
+        result.classList.remove('hidden');
+      }
+
+      // Restore saved journal entry on load
+      if (entry) {
+        try {
+          const saved = localStorage.getItem(STORAGE_KEY);
+          if (saved) entry.value = saved;
+        } catch (e) {
+          // If storage is blocked, just skip saving.
+        }
+      }
+
+      // Analyze button: save locally + match + display
+      if (analyzeBtn && entry) {
+        analyzeBtn.addEventListener('click', () => {
+          const text = entry.value;
+          try { localStorage.setItem(STORAGE_KEY, text); } catch (e) {}
+          const { key, score } = analyzeJournal(text);
+          if (!key) return;
+          showJournalResult(key, score);
+        });
+      }
+
+      // Clear button: wipe entry + local save + results
+      if (clearBtn && entry) {
+        clearBtn.addEventListener('click', () => {
+          entry.value = '';
+          try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+          if (result) result.classList.add('hidden');
+        });
+      }
+
+      // ---------- TESTS (keep existing intent; add more) ----------
+      console.assert(document.getElementById('evening-prayer'), 'Evening prayer section missing');
+      console.assert(versePool.length > dailyVerses.length, 'Verse pool should be larger than daily verses');
+      console.assert(!!document.getElementById('next-verse'), 'Missing #next-verse button');
+      console.assert(!!document.getElementById('scripture-text') && !!document.getElementById('scripture-ref'), 'Scripture elements missing');
+      console.assert(typeof renderVerse === 'function', 'renderVerse should be a function');
+      console.assert(!!document.getElementById('journal-entry'), 'Missing #journal-entry textarea');
+      console.assert(!!document.getElementById('analyze-journal'), 'Missing #analyze-journal button');
+      console.assert(typeof analyzeJournal === 'function', 'analyzeJournal should be a function');
+      console.assert(typeof showJournalResult === 'function', 'showJournalResult should be a function');
+      console.assert(typeof scoreText === 'function', 'scoreText should be a function');
+      console.assert(typeof localStorage !== 'undefined', 'localStorage should be available');
+    })();
+  </script>
+
+</body>
+</html>
