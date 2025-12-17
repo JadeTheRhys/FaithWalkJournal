@@ -438,7 +438,10 @@
         const diffHours = Math.floor(diffMs / 3600000);
         const diffDays = Math.floor(diffMs / 86400000);
         
-        if (diffMins < 60) return diffMins <= 1 ? 'Just now' : `${diffMins} mins ago`;
+        // Handle future dates (clock skew)
+        if (diffMs < 0) return 'Just now';
+        
+        if (diffMins < 60) return diffMins < 1 ? 'Just now' : `${diffMins} mins ago`;
         if (diffHours < 24) return diffHours === 1 ? '1 hour ago' : `${diffHours} hours ago`;
         if (diffDays < 7) return diffDays === 1 ? 'Yesterday' : `${diffDays} days ago`;
         
@@ -467,7 +470,7 @@
                   <p class="text-xs text-rose-400">${escapeHtml(formatDate(entry.date))}</p>
                   <p class="text-sm mt-1 text-rose-800">${escapeHtml(entry.text.substring(0, 100))}${entry.text.length > 100 ? '...' : ''}</p>
                 </div>
-                <button data-delete-id="${entry.id}" class="delete-entry-btn text-rose-400 hover:text-rose-600 text-xs">×</button>
+                <button data-delete-id="${escapeHtml(String(entry.id))}" class="delete-entry-btn text-rose-400 hover:text-rose-600 text-xs">×</button>
               </div>
               <div class="border-t border-amber-100 pt-2 space-y-1">
                 <p class="text-xs"><span class="text-rose-500">Feeling:</span> <span class="font-medium">${escapeHtml(entry.emotion)}</span></p>
@@ -475,14 +478,6 @@
               </div>
             </div>
           `).join('');
-
-          // Use event delegation for delete buttons
-          historyContainer.querySelectorAll('.delete-entry-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-              const id = parseInt(e.target.dataset.deleteId, 10);
-              if (!isNaN(id)) deleteJournalEntry(id);
-            });
-          });
         } catch (e) {
           console.error('Failed to display history:', e);
         }
@@ -495,6 +490,16 @@
         toggleHistoryBtn.addEventListener('click', () => {
           const isHidden = historyDisplay.classList.toggle('hidden');
           toggleHistoryBtn.textContent = isHidden ? 'Show history' : 'Hide history';
+        });
+      }
+
+      // Event delegation for delete buttons (avoids memory leaks)
+      if (historyDisplay) {
+        historyDisplay.addEventListener('click', (e) => {
+          if (e.target.classList.contains('delete-entry-btn')) {
+            const id = parseInt(e.target.dataset.deleteId, 10);
+            if (!isNaN(id)) deleteJournalEntry(id);
+          }
         });
       }
 
