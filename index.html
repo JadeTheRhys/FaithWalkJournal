@@ -3,887 +3,1142 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Today’s Walk</title>
+  <title>FaithWalk Journal</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-    
-    /* Base styles with fallback for when Tailwind doesn't load */
+    /* Earth-Tone Elegant Design */
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+      --earth-dark: #3e2723;
+      --earth-medium: #5d4037;
+      --earth-light: #8d6e63;
+      --sand: #d7ccc8;
+      --cream: #efebe9;
+      --warm-white: #fafaf8;
+      --sage: #8a9a5b;
+      --olive: #6b7c3f;
+      --terracotta: #c17b63;
+      --gold: #b8860b;
+    }
+    
     body { 
-      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: 'Lato', system-ui, sans-serif;
       min-height: 100vh;
-      background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 50%, #fff1f2 100%);
-      color: #881337;
+      background: linear-gradient(135deg, #f5f1e8 0%, #e8dcc4 50%, #d9c9b0 100%);
+      color: var(--earth-dark);
+      overflow-x: hidden;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+    }
+    
+    /* Navigation Bar */
+    nav {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(139, 110, 99, 0.2);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(62, 39, 35, 0.08);
+    }
+    
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--earth-medium);
+      font-family: 'Cormorant Garamond', serif;
+      letter-spacing: -0.02em;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    
+    .nav-links a {
+      color: var(--earth-light);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      transition: color 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .nav-links a:hover {
+      color: var(--olive);
+    }
+    
+    /* Hero Section */
+    .hero {
+      min-height: 75vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 1.5rem;
-      line-height: 1.6;
+      text-align: center;
+      padding: 4rem 2rem;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" opacity="0.1"><circle cx="200" cy="100" r="80" fill="%238a9a5b"/><circle cx="900" cy="400" r="100" fill="%23c17b63"/><circle cx="600" cy="500" r="60" fill="%23b8860b"/></svg>') center/cover;
+      position: relative;
     }
     
-    main {
-      max-width: 38rem;
-      width: 100%;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(20px);
-      border-radius: 1.5rem;
-      box-shadow: 0 25px 50px -12px rgba(136, 19, 55, 0.15), 0 10px 20px -5px rgba(251, 113, 133, 0.1);
-      padding: 2rem;
-      border: 2px solid rgba(251, 191, 36, 0.3);
+    .hero-content {
+      max-width: 800px;
+      animation: fadeInUp 1s ease-out;
     }
     
-    section {
-      background: linear-gradient(to bottom right, #fdf2f8, #fff7ed);
-      border: 1px solid rgba(253, 230, 138, 0.6);
-      border-radius: 1rem;
-      padding: 1.25rem;
+    .hero h1 {
+      font-size: 4rem;
       margin-bottom: 1.5rem;
-      box-shadow: 0 2px 8px rgba(136, 19, 55, 0.04);
-    }
-    
-    h1 { 
-      font-size: 2.25rem; 
-      font-weight: 700; 
-      text-align: center; 
-      color: #be123c; 
-      margin: 0.75rem 0; 
-      letter-spacing: -0.025em;
-      text-shadow: 0 2px 4px rgba(190, 18, 60, 0.1);
-    }
-    
-    h2 { 
-      font-size: 0.8125rem; 
-      text-transform: uppercase; 
-      letter-spacing: 0.1em; 
-      color: #f43f5e; 
-      margin-bottom: 1rem; 
+      color: var(--earth-medium);
+      line-height: 1.2;
       font-weight: 600;
     }
     
-    p { margin-bottom: 0.5rem; color: #881337; line-height: 1.7; }
+    .hero p {
+      font-size: 1.25rem;
+      color: var(--earth-light);
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
     
-    button {
-      padding: 0.625rem 1.25rem;
-      border-radius: 0.625rem;
-      border: 1.5px solid rgba(253, 230, 138, 0.5);
-      background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
-      color: #881337;
+    /* Container for grid layout */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+    
+    /* Grid layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    
+    /* Card Styling */
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 8px 24px rgba(62, 39, 35, 0.1);
+      border: 1px solid rgba(139, 110, 99, 0.15);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--sage), var(--terracotta), var(--gold));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(62, 39, 35, 0.15);
+    }
+    
+    .card:hover::before {
+      opacity: 1;
+    }
+    
+    .card h2 {
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+      color: var(--earth-medium);
+    }
+    
+    .card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.75rem;
+      color: var(--earth-medium);
+    }
+    
+    .card p {
+      line-height: 1.7;
+      color: var(--earth-light);
+      margin-bottom: 0.75rem;
+    }
+    
+    /* Section Headers */
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .section-header h2 {
+      font-size: 3rem;
+      color: var(--earth-medium);
+      margin-bottom: 1rem;
+    }
+    
+    .section-header p {
+      font-size: 1.1rem;
+      color: var(--earth-light);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    
+    /* Buttons */
+    button, .btn {
+      padding: 0.75rem 1.75rem;
+      border-radius: 0.5rem;
+      border: 2px solid var(--sage);
+      background: linear-gradient(135deg, rgba(138, 154, 91, 0.1), rgba(138, 154, 91, 0.05));
+      color: var(--earth-medium);
       cursor: pointer;
-      font-size: 0.875rem;
+      font-size: 0.95rem;
       font-weight: 500;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      margin: 0.25rem;
-      box-shadow: 0 2px 4px rgba(136, 19, 55, 0.08);
+      transition: all 0.3s ease;
+      font-family: 'Lato', sans-serif;
+      display: inline-block;
+      text-decoration: none;
     }
     
-    button:hover {
-      background: linear-gradient(135deg, #fbcfe8 0%, #f9a8d4 100%);
-      box-shadow: 0 6px 12px rgba(136, 19, 55, 0.15), 0 2px 4px rgba(251, 113, 133, 0.1);
-      transform: translateY(-1px);
-      border-color: rgba(251, 191, 36, 0.7);
+    button:hover, .btn:hover {
+      background: linear-gradient(135deg, rgba(138, 154, 91, 0.2), rgba(138, 154, 91, 0.15));
+      border-color: var(--olive);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(138, 154, 91, 0.3);
     }
     
-    button:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 4px rgba(136, 19, 55, 0.1);
+    button.primary {
+      background: linear-gradient(135deg, var(--sage), var(--olive));
+      color: white;
+      border-color: var(--olive);
     }
     
-    textarea {
+    button.primary:hover {
+      background: linear-gradient(135deg, var(--olive), var(--sage));
+    }
+    
+    /* Input and Textarea */
+    textarea, input[type="text"], input[type="email"] {
       width: 100%;
       padding: 1rem;
-      border-radius: 0.875rem;
-      border: 1.5px solid rgba(253, 230, 138, 0.5);
+      border-radius: 0.5rem;
+      border: 2px solid var(--sand);
       background: rgba(255, 255, 255, 0.9);
-      font-size: 0.9375rem;
-      line-height: 1.6;
-      font-family: inherit;
+      font-size: 1rem;
+      font-family: 'Lato', sans-serif;
+      color: var(--earth-dark);
+      transition: all 0.3s ease;
       resize: vertical;
-      transition: all 0.25s ease;
-      box-shadow: inset 0 2px 4px rgba(136, 19, 55, 0.03);
     }
     
-    textarea:focus {
+    textarea:focus, input[type="text"]:focus, input[type="email"]:focus {
       outline: none;
-      box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.3), inset 0 2px 4px rgba(136, 19, 55, 0.05);
-      border-color: rgba(251, 191, 36, 0.8);
-      background: #ffffff;
+      border-color: var(--sage);
+      box-shadow: 0 0 0 3px rgba(138, 154, 91, 0.1);
     }
     
-    .hidden { display: none !important; }
-    .text-center { text-align: center; }
-    .text-xs { font-size: 0.75rem; }
-    .text-sm { font-size: 0.875rem; }
-    .text-lg { font-size: 1.125rem; }
-    .font-medium { font-weight: 500; }
-    .font-semibold { font-weight: 600; }
-    .italic { font-style: italic; }
-    .underline { text-decoration: underline; }
-    .uppercase { text-transform: uppercase; }
-    
-    .space-y-2 > * + * { margin-top: 0.5rem; }
-    .space-y-3 > * + * { margin-top: 0.75rem; }
-    .space-y-6 > * + * { margin-top: 1.5rem; }
-    
-    .flex { display: flex; }
-    .flex-wrap { flex-wrap: wrap; }
-    .flex-1 { flex: 1; }
-    .items-baseline { align-items: baseline; }
-    .items-start { align-items: flex-start; }
-    .items-center { align-items: center; }
-    .justify-between { justify-content: space-between; }
-    .gap-2 { gap: 0.5rem; }
-    .gap-3 { gap: 0.75rem; }
-    
-    .grid { display: grid; }
-    .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
-    @media (min-width: 640px) {
-      .sm\\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    /* Mood Buttons */
+    .mood-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
     }
     
-    .rounded-full { border-radius: 9999px; }
-    .rounded-xl { border-radius: 0.75rem; }
-    
-    .border-t { border-top: 1px solid #fef3c7; }
-    .pt-2 { padding-top: 0.5rem; }
-    .mt-1 { margin-top: 0.25rem; }
-    .mt-2 { margin-top: 0.5rem; }
-    .p-3 { padding: 0.75rem; }
-    .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
-    .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
-    .px-4 { padding-left: 1rem; padding-right: 1rem; }
-    .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
-    
-    .smooth-transition { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
-    .fade-in { animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
-    @keyframes fadeIn { 
-      from { opacity: 0; transform: translateY(16px); } 
-      to { opacity: 1; transform: translateY(0); } 
+    .mood-btn {
+      padding: 0.75rem 1rem;
+      border: 2px solid var(--sand);
+      background: white;
+      border-radius: 0.75rem;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
     }
     
-    /* Enhanced focus states */
-    button:focus-visible {
-      outline: 2px solid #f43f5e;
-      outline-offset: 2px;
+    .mood-btn:hover {
+      border-color: var(--sage);
+      background: rgba(138, 154, 91, 0.05);
+      transform: translateY(-2px);
     }
     
-    /* Better hover states for interactive elements */
-    .delete-entry-btn {
-      font-size: 1.25rem;
-      font-weight: 600;
-      transition: all 0.2s ease;
-      opacity: 0.6;
+    /* Scripture & Verse Display */
+    .scripture-display {
+      background: linear-gradient(135deg, rgba(250, 250, 248, 0.9), rgba(239, 235, 233, 0.8));
+      padding: 2rem;
+      border-radius: 1rem;
+      border-left: 4px solid var(--gold);
+      margin: 1.5rem 0;
     }
     
-    .delete-entry-btn:hover {
-      opacity: 1;
-      transform: scale(1.15);
-      color: #be123c !important;
-    }
-    
-    .text-rose-300 { color: #fda4af; }
-    .text-rose-400 { color: #fb7185; }
-    .text-rose-500 { color: #f43f5e; }
-    .text-rose-600 { color: #e11d48; }
-    .text-rose-700 { color: #be123c; }
-    .text-rose-800 { color: #881337; }
-    
-    .bg-white { background: #ffffff; }
-    .bg-pink-50 { background: #fdf2f8; }
-    .bg-pink-100 { background: #fce7f3; }
-    .bg-pink-200 { background: #fbcfe8; }
-    
-    .border-amber-100 { border-color: #fef3c7; }
-    .border-amber-200 { border-color: #fde68a; }
-    .border-amber-300 { border-color: #fbbf24; }
-    
-    /* Additional utilities */
-    .bg-white\/70 { 
-      background: rgba(255, 255, 255, 0.8); 
-      box-shadow: 0 2px 6px rgba(136, 19, 55, 0.06);
-    }
-    .bg-white\/80 { 
-      background: rgba(255, 255, 255, 0.9); 
-      box-shadow: 0 2px 6px rgba(136, 19, 55, 0.06);
-    }
-    .leading-relaxed { line-height: 1.7; }
-    
-    /* Enhanced header styling */
-    header p {
-      font-weight: 400;
-      letter-spacing: 0.01em;
-    }
-    
-    /* Better separation for sections */
-    section:last-of-type {
-      margin-bottom: 0;
-    }
-    
-    /* Enhanced scripture display */
-    #scripture-text {
-      font-size: 1.125rem;
-      font-weight: 500;
-      line-height: 1.75;
-      color: #9f1239;
-    }
-    
-    /* Enhanced verse references */
-    #scripture-ref, #matched-ref {
+    .scripture-text {
+      font-size: 1.3rem;
       font-style: italic;
-      font-weight: 500;
-      opacity: 0.85;
+      color: var(--earth-medium);
+      margin-bottom: 1rem;
+      line-height: 1.8;
+      font-family: 'Cormorant Garamond', serif;
     }
     
-    /* Better journal result styling */
-    #journal-result {
-      border: 1.5px solid rgba(251, 191, 36, 0.4);
-      background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.95), rgba(255, 247, 237, 0.8));
+    .scripture-ref {
+      font-size: 0.95rem;
+      color: var(--earth-light);
+      font-weight: 600;
+      text-align: right;
     }
     
-    /* Improved footer */
+    /* Journaling Prompts */
+    .prompt-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .prompt-item {
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      background: rgba(138, 154, 91, 0.05);
+      border-radius: 0.5rem;
+      border-left: 3px solid var(--sage);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .prompt-item:hover {
+      background: rgba(138, 154, 91, 0.1);
+      transform: translateX(8px);
+    }
+    
+    /* Testimonial Cards */
+    .testimonial {
+      background: linear-gradient(135deg, rgba(250, 250, 248, 0.95), rgba(239, 235, 233, 0.9));
+      padding: 1.75rem;
+      border-radius: 1rem;
+      border-top: 3px solid var(--terracotta);
+      margin-bottom: 1.5rem;
+    }
+    
+    .testimonial-text {
+      font-style: italic;
+      margin-bottom: 1rem;
+      line-height: 1.7;
+    }
+    
+    .testimonial-author {
+      font-weight: 600;
+      color: var(--earth-medium);
+      font-size: 0.9rem;
+    }
+    
+    /* Community Section */
+    .community-post {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      border: 1px solid var(--sand);
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    .community-post:hover {
+      box-shadow: 0 4px 16px rgba(62, 39, 35, 0.08);
+    }
+    
+    /* Devotional Section */
+    .devotional-card {
+      background: linear-gradient(to bottom, rgba(250, 250, 248, 1), rgba(239, 235, 233, 0.95));
+      border-radius: 1rem;
+      padding: 2rem;
+      border: 2px solid var(--sand);
+    }
+    
+    .devotional-title {
+      font-size: 2rem;
+      color: var(--earth-medium);
+      margin-bottom: 1rem;
+    }
+    
+    .devotional-content {
+      line-height: 1.8;
+      color: var(--earth-dark);
+      margin-bottom: 1.5rem;
+    }
+    
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.6s ease-out;
+    }
+    
+    .fade-in-up {
+      animation: fadeInUp 0.8s ease-out;
+    }
+    
+    /* Hidden utility */
+    .hidden {
+      display: none !important;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+      
+      .section-header h2 {
+        font-size: 2rem;
+      }
+      
+      .grid-2, .grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* Tab System */
+    .tab-nav {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid var(--sand);
+      padding-bottom: 0.5rem;
+    }
+    
+    .tab-btn {
+      background: none;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      color: var(--earth-light);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -0.5rem;
+    }
+    
+    .tab-btn.active {
+      color: var(--earth-medium);
+      border-bottom-color: var(--sage);
+      font-weight: 600;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.5s ease-out;
+    }
+    
+    /* Loading State */
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid var(--sand);
+      border-top-color: var(--sage);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Footer */
     footer {
-      font-size: 0.8125rem;
-      opacity: 0.7;
-      font-weight: 400;
+      background: rgba(62, 39, 35, 0.05);
+      padding: 2rem;
+      text-align: center;
+      color: var(--earth-light);
+      font-size: 0.9rem;
+      margin-top: 4rem;
     }
   </style>
 </head>
-<body class="min-h-screen bg-gradient-to-b from-pink-50 via-pink-100 to-white text-rose-900 flex items-center justify-center px-4">
+<body>
 
-  <main class="max-w-xl w-full bg-white/80 backdrop-blur rounded-2xl shadow-xl p-6 space-y-6 border border-amber-300">
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <div class="logo">FaithWalk Journal</div>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#journal">Journal</a></li>
+        <li><a href="#devotionals">Devotionals</a></li>
+        <li><a href="#community">Community</a></li>
+        <li><a href="#stories">Stories</a></li>
+      </ul>
+    </div>
+  </nav>
 
-    <!-- Header -->
-    <header class="text-center space-y-2">
-      <p id="time-greeting" class="text-sm text-rose-500"></p>
-      <h1 class="text-3xl font-semibold tracking-tight text-rose-700">Today’s Walk</h1>
-      <p class="text-rose-400 text-sm">A quiet place to breathe and be with God</p>
-    </header>
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <h1>Your Journey of Faith</h1>
+      <p>A sacred space for reflection, connection, and spiritual growth. Walk with God through every season of life.</p>
+      <button class="primary" onclick="scrollToSection('journal')">Begin Your Journey</button>
+    </div>
+  </section>
 
-    <!-- Mood Selector -->
-    <section class="bg-pink-50 border border-amber-200 rounded-xl p-4 space-y-3">
-      <h2 class="text-sm uppercase tracking-wide text-rose-400">How are you feeling?</h2>
-      <div class="flex flex-wrap gap-2">
-        <button data-mood="peace" class="mood-btn px-3 py-1 rounded-full bg-white border border-amber-300 text-sm hover:bg-pink-50 hover:shadow-md smooth-transition">Peaceful</button>
-        <button data-mood="tired" class="mood-btn px-3 py-1 rounded-full bg-white border border-amber-300 text-sm hover:bg-pink-50 hover:shadow-md smooth-transition">Tired</button>
-        <button data-mood="anxious" class="mood-btn px-3 py-1 rounded-full bg-white border border-amber-300 text-sm hover:bg-pink-50 hover:shadow-md smooth-transition">Anxious</button>
-        <button data-mood="hopeful" class="mood-btn px-3 py-1 rounded-full bg-white border border-amber-300 text-sm hover:bg-pink-50 hover:shadow-md smooth-transition">Hopeful</button>
-      </div>
-      <div class="text-center">
-        <button id="reset-mood" class="text-xs text-rose-400 underline hover:text-rose-600">Reset mood</button>
-      </div>
-    </section>
-
-    <!-- Scripture Card -->
-    <section class="bg-pink-50 border border-amber-200 rounded-xl p-4 space-y-3">
-      <h2 class="text-sm uppercase tracking-wide text-rose-400">Scripture</h2>
-      <p id="scripture-text" class="text-lg leading-relaxed"></p>
-      <p id="scripture-ref" class="text-xs text-rose-300"></p>
-      <button id="next-verse" class="mt-2 text-xs text-rose-500 underline hover:text-rose-700">Show another verse</button>
-    </section>
-
-    <!-- Reflection -->
-    <section class="bg-pink-50 border border-amber-200 rounded-xl p-4 space-y-2">
-      <h2 class="text-sm uppercase tracking-wide text-rose-400">Reflection</h2>
-      <p id="reflection-text" class="leading-relaxed text-rose-800 hidden">What would it look like to pause instead of pushing today?</p>
-      <button id="toggle-reflection" class="text-xs text-rose-500 underline hover:text-rose-700">Show reflection</button>
-    </section>
-
-    <!-- Journal -->
-    <section class="bg-pink-50 border border-amber-200 rounded-xl p-4 space-y-3">
-      <div class="flex items-baseline justify-between gap-3">
-        <h2 class="text-sm uppercase tracking-wide text-rose-400">Journal</h2>
-        <p class="text-[11px] text-rose-400">Saves on this device only (local)</p>
-      </div>
-
-      <label class="block text-sm text-rose-700" for="journal-entry">How are you feeling right now?</label>
-      <textarea id="journal-entry" rows="5" class="w-full rounded-xl border border-amber-200 bg-white/80 p-3 text-sm leading-relaxed outline-none focus:ring-2 focus:ring-amber-200" placeholder="Write it out. Messy is okay."></textarea>
-
-      <div class="flex flex-wrap gap-2">
-        <button id="analyze-journal" class="rounded-xl bg-pink-100 border border-amber-300 hover:bg-pink-200 hover:shadow-md smooth-transition px-4 py-2 text-sm">Find a verse for me</button>
-        <button id="clear-journal" class="rounded-xl bg-white border border-amber-200 hover:bg-pink-50 hover:shadow-sm smooth-transition px-4 py-2 text-sm">Clear</button>
-      </div>
-
-      <section id="journal-result" class="rounded-xl bg-white/70 border border-amber-200 p-4 space-y-2 hidden">
-        <div class="flex flex-wrap items-center justify-between gap-2">
-          <p class="text-sm"><span class="text-rose-500">Matched:</span> <span id="matched-feeling" class="font-medium"></span></p>
-          <p class="text-xs text-rose-400" id="confidence"></p>
+  <!-- Daily Scripture & Mood -->
+  <div class="container">
+    <div class="grid-2">
+      
+      <!-- Scripture Card -->
+      <div class="card fade-in-up">
+        <h2>Today's Scripture</h2>
+        <div class="scripture-display">
+          <p class="scripture-text" id="scripture-text">"Be still, and know that I am God."</p>
+          <p class="scripture-ref" id="scripture-ref">Psalm 46:10</p>
         </div>
-
-        <div class="space-y-1">
-          <p class="text-xs uppercase tracking-wide text-rose-400">Verse</p>
-          <p id="matched-verse" class="text-sm leading-relaxed"></p>
-          <p id="matched-ref" class="text-xs text-rose-400"></p>
-        </div>
-
-        <div class="space-y-1">
-          <p class="text-xs uppercase tracking-wide text-rose-400">Someone in the Bible who felt this</p>
-          <p id="matched-story" class="text-sm leading-relaxed text-rose-800"></p>
-        </div>
-
-        <div class="space-y-1">
-          <p class="text-xs uppercase tracking-wide text-rose-400">How God helps</p>
-          <p id="matched-help" class="text-sm leading-relaxed text-rose-800"></p>
-        </div>
-
-        <div class="space-y-1">
-          <p class="text-xs uppercase tracking-wide text-rose-400">Short prayer</p>
-          <p id="matched-prayer" class="text-sm leading-relaxed"></p>
-        </div>
-      </section>
-    </section>
-
-    <!-- Journal History -->
-    <section id="journal-history-section" class="bg-pink-50 border border-amber-200 rounded-xl p-4 space-y-3 hidden">
-      <div class="flex items-baseline justify-between gap-3">
-        <h2 class="text-sm uppercase tracking-wide text-rose-400">Past Entries</h2>
-        <button id="toggle-history" class="text-xs text-rose-500 underline hover:text-rose-700">Show history</button>
+        <button id="next-verse">Show Another Verse</button>
+        <p id="time-greeting" style="margin-top: 1rem; font-style: italic; color: var(--earth-light);"></p>
       </div>
-      <div id="journal-history" class="space-y-3 hidden"></div>
-    </section>
-
-    <!-- Prayer Buttons -->
-    <section class="space-y-3">
-      <h2 class="text-sm uppercase tracking-wide text-rose-400 text-center">Choose a prayer</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <button data-prayer="overwhelmed" class="prayer-btn rounded-xl bg-pink-100 border border-amber-300 hover:bg-pink-200 hover:shadow-md smooth-transition p-3 text-sm">I feel overwhelmed</button>
-        <button data-prayer="numb" class="prayer-btn rounded-xl bg-pink-100 border border-amber-300 hover:bg-pink-200 hover:shadow-md smooth-transition p-3 text-sm">I feel numb</button>
-        <button data-prayer="grateful" class="prayer-btn rounded-xl bg-pink-100 border border-amber-300 hover:bg-pink-200 hover:shadow-md smooth-transition p-3 text-sm">I feel grateful</button>
+      
+      <!-- Mood Check-In -->
+      <div class="card fade-in-up">
+        <h2>How Are You Feeling?</h2>
+        <p>Your emotions matter. Let's check in with your heart today.</p>
+        <div class="mood-grid">
+          <button data-mood="peace" class="mood-btn">Peaceful</button>
+          <button data-mood="tired" class="mood-btn">Tired</button>
+          <button data-mood="anxious" class="mood-btn">Anxious</button>
+          <button data-mood="hopeful" class="mood-btn">Hopeful</button>
+          <button data-mood="lonely" class="mood-btn">Lonely</button>
+          <button data-mood="grateful" class="mood-btn">Grateful</button>
+        </div>
+        <button id="reset-mood" style="margin-top: 1rem;">Reset Mood</button>
       </div>
-    </section>
+      
+    </div>
+  </div>
 
-    <!-- Prayer Output -->
-    <section id="prayer-output" class="bg-pink-50 border border-amber-200 rounded-xl p-4 space-y-2 hidden">
-      <h2 class="text-sm uppercase tracking-wide text-rose-400">Prayer</h2>
-      <p id="prayer-text" class="leading-relaxed"></p>
-    </section>
+  <!-- Thematic Sections: Biblical Figures -->
+  <div class="container">
+    <div class="section-header">
+      <h2>Stories of Faith</h2>
+      <p>Learn from those who walked before us, finding comfort and wisdom in their journeys.</p>
+    </div>
+    
+    <div class="grid-3">
+      
+      <div class="card">
+        <h3>Hagar: The God Who Sees</h3>
+        <p>In her deepest isolation, Hagar discovered a profound truth: God sees us even when others overlook us. She was alone in the wilderness, cast out and forgotten by people, yet God met her there.</p>
+        <div class="scripture-display">
+          <p class="scripture-text">"You are the God who sees me."</p>
+          <p class="scripture-ref">Genesis 16:13</p>
+        </div>
+        <p><strong>Reflection:</strong> When have you felt unseen? God's promise to Hagar is His promise to you—He sees every tear, every struggle, every lonely moment.</p>
+      </div>
+      
+      <div class="card">
+        <h3>David: Honest Before God</h3>
+        <p>David didn't hide his fear, anger, or confusion from God. The Psalms reveal a man who brought his whole self—messy emotions and all—into God's presence.</p>
+        <div class="scripture-display">
+          <p class="scripture-text">"The Lord is near to the brokenhearted."</p>
+          <p class="scripture-ref">Psalm 34:18</p>
+        </div>
+        <p><strong>Reflection:</strong> What would it look like to be completely honest with God today? He can handle your real emotions.</p>
+      </div>
+      
+      <div class="card">
+        <h3>Hannah: Prayer in Pain</h3>
+        <p>Hannah poured out her anguish before the Lord, weeping bitterly. She didn't perform or pretend—she came as she was, broken and desperate.</p>
+        <div class="scripture-display">
+          <p class="scripture-text">"In her deep anguish, Hannah prayed to the Lord, weeping bitterly."</p>
+          <p class="scripture-ref">1 Samuel 1:10</p>
+        </div>
+        <p><strong>Reflection:</strong> God invites your tears. Your pain is not too much for Him to handle.</p>
+      </div>
+      
+    </div>
+  </div>
 
-    <!-- Evening Prayer (hidden by default) -->
-    <section id="evening-prayer" class="bg-pink-50 border border-amber-200 rounded-xl p-4 space-y-2 hidden">
-      <h2 class="text-sm uppercase tracking-wide text-rose-400">Evening Prayer</h2>
-      <p class="leading-relaxed">God, the day is done. I give You what I didn’t finish, what I couldn’t fix, and what still weighs on me. Hold me in Your peace tonight.</p>
-    </section>
+  <!-- Journaling Section -->
+  <div class="container" id="journal">
+    <div class="section-header">
+      <h2>Your Sacred Space</h2>
+      <p>Pour out your heart. God is listening.</p>
+    </div>
+    
+    <div class="grid-2">
+      
+      <!-- Journal Entry -->
+      <div class="card">
+        <h3>Write Your Heart</h3>
+        <p style="font-size: 0.85rem; color: var(--earth-light); margin-bottom: 1rem;">Your entries are private and saved locally on your device.</p>
+        <textarea id="journal-entry" rows="8" placeholder="What's on your heart today? Be honest. Be real. God can handle it all."></textarea>
+        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+          <button id="analyze-journal" class="primary">Find Scripture for Me</button>
+          <button id="clear-journal">Clear</button>
+        </div>
+        
+        <!-- Journal Result -->
+        <div id="journal-result" class="hidden" style="margin-top: 1.5rem; padding: 1.5rem; background: rgba(138, 154, 91, 0.05); border-radius: 0.75rem; border-left: 4px solid var(--sage);">
+          <p style="margin-bottom: 0.5rem;"><strong>Feeling:</strong> <span id="matched-feeling"></span></p>
+          <div class="scripture-display">
+            <p class="scripture-text" id="matched-verse"></p>
+            <p class="scripture-ref" id="matched-ref"></p>
+          </div>
+          <p style="margin-top: 1rem;"><strong>Biblical Parallel:</strong></p>
+          <p id="matched-story" style="font-style: italic;"></p>
+          <p style="margin-top: 1rem;"><strong>How God Helps:</strong></p>
+          <p id="matched-help"></p>
+          <p style="margin-top: 1rem;"><strong>Prayer:</strong></p>
+          <p id="matched-prayer" style="font-style: italic; color: var(--earth-medium);"></p>
+        </div>
+      </div>
+      
+      <!-- Guided Prompts -->
+      <div class="card">
+        <h3>Guided Prompts</h3>
+        <p>Not sure where to start? Try one of these reflections:</p>
+        <ul class="prompt-list">
+          <li class="prompt-item" onclick="usePrompt('What am I grateful for today, even in the hard things?')">
+            What am I grateful for today, even in the hard things?
+          </li>
+          <li class="prompt-item" onclick="usePrompt('Where do I feel God\'s presence right now? Where do I feel His absence?')">
+            Where do I feel God's presence right now? Where do I feel His absence?
+          </li>
+          <li class="prompt-item" onclick="usePrompt('What fear or worry am I carrying that I need to give to God?')">
+            What fear or worry am I carrying that I need to give to God?
+          </li>
+          <li class="prompt-item" onclick="usePrompt('When have I felt seen and loved by God recently?')">
+            When have I felt seen and loved by God recently?
+          </li>
+          <li class="prompt-item" onclick="usePrompt('What does my soul need most today? Rest? Courage? Hope?')">
+            What does my soul need most today? Rest? Courage? Hope?
+          </li>
+          <li class="prompt-item" onclick="usePrompt('How have I experienced God\'s faithfulness in the past?')">
+            How have I experienced God's faithfulness in the past?
+          </li>
+        </ul>
+      </div>
+      
+    </div>
+  </div>
 
-    <footer class="text-center text-xs text-rose-400 pt-2 italic">Built as a quiet space for faith, grace, and softness.</footer>
+  <!-- Devotionals -->
+  <div class="container" id="devotionals">
+    <div class="section-header">
+      <h2>Daily Devotionals</h2>
+      <p>Reflections to guide your walk with God through every season.</p>
+    </div>
+    
+    <div class="devotional-card">
+      <h3 class="devotional-title" id="devotional-title">When You Feel Invisible</h3>
+      <div class="devotional-content" id="devotional-content">
+        <p>There's a profound loneliness in feeling unseen—like you could disappear and no one would notice. But here's the truth Scripture keeps telling us: God sees you.</p>
+        
+        <p>Hagar, a servant woman fleeing into the wilderness, had every reason to believe she didn't matter. She was used, discarded, alone. Yet God met her there and she gave Him a name: "El Roi"—the God who sees.</p>
+        
+        <div class="scripture-display">
+          <p class="scripture-text">"You are the God who sees me, for she said, 'I have now seen the One who sees me.'"</p>
+          <p class="scripture-ref">Genesis 16:13</p>
+        </div>
+        
+        <p>What does it mean that God sees you? It means:</p>
+        <ul style="margin: 1rem 0; padding-left: 1.5rem; line-height: 1.8;">
+          <li>Your pain is not invisible to Him</li>
+          <li>Your tears are counted</li>
+          <li>Your loneliness moves His heart</li>
+          <li>Your worth is not determined by who notices you</li>
+        </ul>
+        
+        <p><strong>Today's Invitation:</strong> Bring God the places where you feel most unseen. Name them. He's already there, seeing you with perfect love.</p>
+      </div>
+      
+      <button onclick="loadNewDevotional()">Load Another Devotional</button>
+    </div>
+  </div>
 
-  </main>
+  <!-- Prayer Guides -->
+  <div class="container">
+    <div class="section-header">
+      <h2>Prayer Guides</h2>
+      <p>When words are hard to find, let these prayers guide you.</p>
+    </div>
+    
+    <div class="grid-3">
+      <div class="card">
+        <h3>When Overwhelmed</h3>
+        <p style="font-style: italic; color: var(--earth-medium);">"God, everything feels heavy right now. I'm carrying more than I can hold. I come to You—not because I have it together, but because You invited me. Teach me what to release and what to leave for tomorrow. Let Your presence steady my anxious heart. Amen."</p>
+        <button data-prayer="overwhelmed" class="prayer-btn" style="margin-top: 1rem;">Use This Prayer</button>
+      </div>
+      
+      <div class="card">
+        <h3>When Lonely</h3>
+        <p style="font-style: italic; color: var(--earth-medium);">"God who sees me, meet me in this loneliness. I feel forgotten and unseen by the people around me. Remind me that Your presence is real, even when I can't feel it. Let me know I'm not alone. Speak to the ache in my heart. Amen."</p>
+        <button data-prayer="lonely" class="prayer-btn" style="margin-top: 1rem;">Use This Prayer</button>
+      </div>
+      
+      <div class="card">
+        <h3>When Grateful</h3>
+        <p style="font-style: italic; color: var(--earth-medium);">"God, thank You. Thank You for walking with me today, for holding me together, for the small mercies I almost missed. Help me remember Your faithfulness when my feelings shift again. Let gratitude be my anchor. Amen."</p>
+        <button data-prayer="grateful" class="prayer-btn" style="margin-top: 1rem;">Use This Prayer</button>
+      </div>
+    </div>
+    
+    <div id="prayer-output" class="card hidden" style="margin-top: 2rem; background: linear-gradient(135deg, rgba(250, 250, 248, 1), rgba(239, 235, 233, 0.95));">
+      <h3>Your Prayer</h3>
+      <p id="prayer-text" style="font-style: italic; font-size: 1.1rem; line-height: 1.8;"></p>
+    </div>
+  </div>
+
+  <!-- Community Connection -->
+  <div class="container" id="community">
+    <div class="section-header">
+      <h2>Community Connection</h2>
+      <p>You're not alone in this journey. Share your heart and encourage others.</p>
+    </div>
+    
+    <div class="grid-2">
+      
+      <div class="card">
+        <h3>Share Anonymously</h3>
+        <p style="font-size: 0.9rem; margin-bottom: 1rem;">Share an insight, prayer request, or word of encouragement with others walking this journey.</p>
+        <textarea id="community-share" rows="4" placeholder="What's God teaching you? What do you need prayer for?"></textarea>
+        <button onclick="shareToCommunity()" class="primary" style="margin-top: 1rem;">Share Anonymously</button>
+        <p style="font-size: 0.8rem; color: var(--earth-light); margin-top: 0.5rem; font-style: italic;">Note: This is a demo. In a full version, this would post to a moderated community space.</p>
+      </div>
+      
+      <div class="card">
+        <h3>Community Insights</h3>
+        <p style="font-size: 0.9rem; margin-bottom: 1rem;">Encouragement from others on the journey:</p>
+        
+        <div class="community-post">
+          <p>"I felt so alone in my struggles with anxiety until I started journaling here. Realizing that Hannah, David, and even Jesus felt deep distress helps me feel less broken. I'm learning that honest faith is stronger than fake peace."</p>
+          <p style="font-size: 0.85rem; color: var(--earth-light); margin-top: 0.5rem;">— Anonymous, 2 days ago</p>
+        </div>
+        
+        <div class="community-post">
+          <p>"The story of Hagar changed everything for me. 'The God who sees'—I needed that today. Feeling invisible has been my biggest struggle, but knowing God sees me even when people don't... that's everything."</p>
+          <p style="font-size: 0.85rem; color: var(--earth-light); margin-top: 0.5rem;">— Anonymous, 1 week ago</p>
+        </div>
+        
+        <div class="community-post">
+          <p>"I've been using the guided prompts when I don't know what to write. It's helping me be more honest with God instead of just saying what I think I should say."</p>
+          <p style="font-size: 0.85rem; color: var(--earth-light); margin-top: 0.5rem;">— Anonymous, 3 days ago</p>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Testimonials & Stories -->
+  <div class="container" id="stories">
+    <div class="section-header">
+      <h2>Stories of Hope</h2>
+      <p>Real people, real struggles, real faith.</p>
+    </div>
+    
+    <div class="testimonial">
+      <p class="testimonial-text">"I've struggled with depression for years, and most Christian spaces made me feel like my sadness meant my faith was weak. This journal taught me that the Psalms are full of lament, that Jesus wept, that it's okay to not be okay. I'm learning to bring God my real self, not the version I think He wants to see."</p>
+      <p class="testimonial-author">— Sarah, 32</p>
+    </div>
+    
+    <div class="testimonial">
+      <p class="testimonial-text">"The devotional on Hagar wrecked me in the best way. I've been in ministry for a decade and I was burnt out, feeling unseen and unappreciated. Reading that God sees me—really sees me—reminded me why I started this journey. El Roi has become my anchor."</p>
+      <p class="testimonial-author">— Michael, 45</p>
+    </div>
+    
+    <div class="testimonial">
+      <p class="testimonial-text">"I'm not good at praying. The prayer guides gave me words when I had none. And the journaling prompts helped me process grief I didn't even know I was carrying. This has become my daily sanctuary."</p>
+      <p class="testimonial-author">— Jessica, 28</p>
+    </div>
+    
+    <div class="testimonial">
+      <p class="testimonial-text">"As someone who experiences loneliness deeply, the community section reminds me I'm not the only one. Knowing others struggle with the same things—and that we're all bringing it to God—makes me feel less alone."</p>
+      <p class="testimonial-author">— David, 51</p>
+    </div>
+  </div>
+
+  <!-- Visual/Interactive Media Section -->
+  <div class="container">
+    <div class="section-header">
+      <h2>Reflect & Meditate</h2>
+      <p>Visual tools to deepen your connection with God.</p>
+    </div>
+    
+    <div class="grid-3">
+      
+      <div class="card">
+        <h3>Breath Prayer</h3>
+        <p>A simple practice to center your mind on God's presence.</p>
+        <div style="text-align: center; padding: 2rem; background: rgba(138, 154, 91, 0.05); border-radius: 0.75rem; margin-top: 1rem;">
+          <p style="font-size: 1.5rem; color: var(--earth-medium); font-family: 'Cormorant Garamond', serif; margin-bottom: 1rem;" id="breath-text">Breathe in: "Be still"</p>
+          <p style="font-size: 1.5rem; color: var(--earth-medium); font-family: 'Cormorant Garamond', serif;">Breathe out: "And know"</p>
+        </div>
+        <button onclick="startBreathPrayer()" style="margin-top: 1rem;">Start Guided Breathing</button>
+      </div>
+      
+      <div class="card">
+        <h3>Scripture Meditation</h3>
+        <p>Slow down and dwell on a single verse.</p>
+        <div class="scripture-display" style="margin-top: 1rem;">
+          <p class="scripture-text" id="meditation-verse">"The Lord is my shepherd; I shall not want."</p>
+          <p class="scripture-ref" id="meditation-ref">Psalm 23:1</p>
+        </div>
+        <p style="margin-top: 1rem; font-size: 0.95rem;">Read this verse slowly three times. What word or phrase stands out to you?</p>
+        <button onclick="loadMeditationVerse()" style="margin-top: 1rem;">New Meditation Verse</button>
+      </div>
+      
+      <div class="card">
+        <h3>Gratitude Practice</h3>
+        <p>Name three things you're grateful for today.</p>
+        <textarea id="gratitude-list" rows="4" placeholder="1. 
+2. 
+3." style="margin-top: 1rem;"></textarea>
+        <button onclick="saveGratitude()" class="primary" style="margin-top: 1rem;">Save to Heart</button>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>FaithWalk Journal — A sacred space for your journey with God</p>
+    <p style="margin-top: 0.5rem; font-size: 0.85rem;">Built with intention, grace, and the belief that your story matters.</p>
+  </footer>
 
   <script>
     'use strict';
 
     (function init() {
-      // Grab elements (guard everything to avoid runtime crashes)
+      // Greeting based on time
       const greeting = document.getElementById('time-greeting');
-      const eveningPrayer = document.getElementById('evening-prayer');
-      const verseText = document.getElementById('scripture-text');
-      const verseRef = document.getElementById('scripture-ref');
-      const nextVerseBtn = document.getElementById('next-verse');
-      const toggleReflectionBtn = document.getElementById('toggle-reflection');
-      const reflection = document.getElementById('reflection-text');
-      const prayerOutput = document.getElementById('prayer-output');
-      const prayerText = document.getElementById('prayer-text');
-      const resetMoodBtn = document.getElementById('reset-mood');
-
-      // ---------- TIME-BASED GREETING + EVENING PRAYER ----------
       const hour = new Date().getHours();
       if (greeting) {
         if (hour < 12) greeting.textContent = 'Good morning. God is with you today.';
         else if (hour < 18) greeting.textContent = 'Good afternoon. Take a breath and rest in Him.';
         else greeting.textContent = 'Good evening. You made it through today.';
       }
-      if (eveningPrayer && hour >= 18) eveningPrayer.classList.remove('hidden');
 
-      // ---------- VERSE LOGIC (daily anchor + randomized pool) ----------
-      const dailyVerses = [
-        { text: 'Be still, and know that I am God.', ref: 'Psalm 46:10' },
-        { text: 'The Lord is near to the brokenhearted.', ref: 'Psalm 34:18' },
-        { text: 'Come to Me, all who are weary and burdened.', ref: 'Matthew 11:28' },
-        { text: 'My grace is sufficient for you.', ref: '2 Corinthians 12:9' },
-        { text: 'Trust in the Lord with all your heart.', ref: 'Proverbs 3:5' },
-        { text: 'Those who hope in the Lord will renew their strength.', ref: 'Isaiah 40:31' },
-        { text: 'The Lord bless you and keep you.', ref: 'Numbers 6:24' }
+      // Scripture rotation
+      const verses = [
+        { text: '"Be still, and know that I am God."', ref: 'Psalm 46:10' },
+        { text: '"The Lord is near to the brokenhearted."', ref: 'Psalm 34:18' },
+        { text: '"Come to Me, all who are weary and burdened."', ref: 'Matthew 11:28' },
+        { text: '"My grace is sufficient for you."', ref: '2 Corinthians 12:9' },
+        { text: '"Trust in the Lord with all your heart."', ref: 'Proverbs 3:5' },
+        { text: '"Those who hope in the Lord will renew their strength."', ref: 'Isaiah 40:31' },
+        { text: '"Cast all your anxiety on Him because He cares for you."', ref: '1 Peter 5:7' },
+        { text: '"Fear not, for I am with you."', ref: 'Isaiah 41:10' },
+        { text: '"I will never leave you nor forsake you."', ref: 'Hebrews 13:5' }
       ];
 
-      const versePool = [
-        ...dailyVerses,
-        { text: 'Cast all your anxiety on Him because He cares for you.', ref: '1 Peter 5:7' },
-        { text: 'Fear not, for I am with you.', ref: 'Isaiah 41:10' },
-        { text: 'The Lord is my shepherd; I shall not want.', ref: 'Psalm 23:1' },
-        { text: 'The Lord will fight for you; you need only to be still.', ref: 'Exodus 14:14' }
-      ];
-
-      function renderVerse(v) {
-        if (!verseText || !verseRef || !v) return;
-        verseText.textContent = `“${v.text}”`;
-        verseRef.textContent = v.ref;
+      function showVerse(verse) {
+        const verseText = document.getElementById('scripture-text');
+        const verseRef = document.getElementById('scripture-ref');
+        if (verseText && verseRef) {
+          verseText.textContent = verse.text;
+          verseRef.textContent = verse.ref;
+        }
       }
 
-      // Daily anchor verse on load
-      const day = new Date().getDay(); // Sun=0 ... Sat=6
-      renderVerse(dailyVerses[day] || dailyVerses[0]);
-
-      // Randomization without immediate repeats
-      let lastIndex = null;
+      const nextVerseBtn = document.getElementById('next-verse');
       if (nextVerseBtn) {
         nextVerseBtn.addEventListener('click', () => {
-          let idx;
-          do {
-            idx = Math.floor(Math.random() * versePool.length);
-          } while (idx === lastIndex && versePool.length > 1);
-
-          lastIndex = idx;
-          renderVerse(versePool[idx]);
+          const randomVerse = verses[Math.floor(Math.random() * verses.length)];
+          showVerse(randomVerse);
         });
       }
 
-      // ---------- REFLECTION TOGGLE ----------
-      if (toggleReflectionBtn && reflection) {
-        toggleReflectionBtn.addEventListener('click', () => {
-          const isHidden = reflection.classList.toggle('hidden');
-          toggleReflectionBtn.textContent = isHidden ? 'Show reflection' : 'Hide reflection';
+      // Mood tracking
+      document.querySelectorAll('.mood-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const mood = btn.dataset.mood;
+          document.body.style.background = getMoodGradient(mood);
+        });
+      });
+
+      const resetMoodBtn = document.getElementById('reset-mood');
+      if (resetMoodBtn) {
+        resetMoodBtn.addEventListener('click', () => {
+          document.body.style.background = 'linear-gradient(135deg, #f5f1e8 0%, #e8dcc4 50%, #d9c9b0 100%)';
         });
       }
 
-      // ---------- PRAYER BUTTONS ----------
+      function getMoodGradient(mood) {
+        const gradients = {
+          peace: 'linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%)',
+          tired: 'linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 50%, #bdbdbd 100%)',
+          anxious: 'linear-gradient(135deg, #fff9c4 0%, #fff59d 50%, #fff176 100%)',
+          hopeful: 'linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%)',
+          lonely: 'linear-gradient(135deg, #f3e5f5 0%, #e1bee7 50%, #ce93d8 100%)',
+          grateful: 'linear-gradient(135deg, #fffde7 0%, #fff9c4 50%, #fff59d 100%)'
+        };
+        return gradients[mood] || 'linear-gradient(135deg, #f5f1e8 0%, #e8dcc4 50%, #d9c9b0 100%)';
+      }
+
+      // Journal analysis
+      const analyzeBtn = document.getElementById('analyze-journal');
+      const journalEntry = document.getElementById('journal-entry');
+      const journalResult = document.getElementById('journal-result');
+      const clearBtn = document.getElementById('clear-journal');
+
+      const journalMap = {
+        anxious: {
+          label: 'Anxious / Afraid',
+          keywords: ['anxious', 'panic', 'worried', 'worry', 'fear', 'scared', 'nervous', 'dread', 'overthinking'],
+          verse: '"Cast all your anxiety on Him because He cares for you."',
+          ref: '1 Peter 5:7',
+          story: 'David often wrote from fear and distress (see many Psalms). He brought the fear to God instead of pretending it wasn\'t there.',
+          help: 'God invites you to hand Him the mental load piece by piece—not after you "calm down," but while you\'re still shaky.',
+          prayer: 'God, my mind is loud. Hold me steady. I give You what I keep replaying. Help me breathe and trust You in this moment.'
+        },
+        overwhelmed: {
+          label: 'Overwhelmed',
+          keywords: ['overwhelmed', 'too much', 'cant do this', 'exhausted', 'burned out', 'stressed', 'pressure', 'drowning'],
+          verse: '"Come to Me, all who are weary and burdened, and I will give you rest."',
+          ref: 'Matthew 11:28',
+          story: 'Moses hit a breaking point under responsibility and cried out to God (Numbers 11). He wasn\'t punished for being honest—he was helped.',
+          help: 'God meets you in the weight, not after you prove you can carry it. Rest is an invitation, not a reward.',
+          prayer: 'Jesus, I\'m carrying more than I can hold. I come to You. Teach me what to release and what to leave for tomorrow.'
+        },
+        sad: {
+          label: 'Sad / Grieving',
+          keywords: ['sad', 'cry', 'crying', 'tears', 'grief', 'heartbroken', 'depressed', 'hopeless', 'empty', 'hurt', 'pain'],
+          verse: '"The Lord is near to the brokenhearted and saves the crushed in spirit."',
+          ref: 'Psalm 34:18',
+          story: 'Hannah poured out her soul in bitterness and tears before the Lord (1 Samuel 1). God saw her privately.',
+          help: 'God doesn\'t rush you past grief. He comes close, stays near, and holds what you can\'t fix.',
+          prayer: 'God, my heart hurts. Stay close to me. Hold what I can\'t carry. Let Your nearness be enough for today.'
+        },
+        lonely: {
+          label: 'Lonely / Unseen',
+          keywords: ['lonely', 'alone', 'unseen', 'ignored', 'no one', 'nobody', 'isolated', 'abandoned', 'forgotten', 'invisible'],
+          verse: '"I will never leave you nor forsake you."',
+          ref: 'Hebrews 13:5',
+          story: 'Hagar felt unseen in the wilderness, and she named God "the God who sees me" (Genesis 16).',
+          help: 'God notices you in the places other people don\'t. His presence is not dependent on someone else showing up.',
+          prayer: 'God who sees me, meet me in this loneliness. Remind me I\'m not forgotten. Let Your presence feel real to me.'
+        },
+        grateful: {
+          label: 'Grateful / Hopeful',
+          keywords: ['grateful', 'thankful', 'blessed', 'hope', 'hopeful', 'joy', 'peace', 'calm', 'good', 'better', 'amazing'],
+          verse: '"Give thanks to the Lord, for He is good; His love endures forever."',
+          ref: 'Psalm 136:1',
+          story: 'Mary treasured and pondered the work of God in her heart (Luke 2). Gratitude became a way of remembering.',
+          help: 'God uses gratitude like an anchor—not to deny hard things, but to keep you rooted in what is still true.',
+          prayer: 'God, thank You for the good I can see today. Help me remember Your faithfulness when my feelings shift again.'
+        }
+      };
+
+      function analyzeJournal(text) {
+        const cleaned = (text || '').toLowerCase().trim();
+        if (!cleaned) return null;
+
+        let bestMatch = null;
+        let bestScore = 0;
+
+        for (const [key, data] of Object.entries(journalMap)) {
+          let score = 0;
+          for (const keyword of data.keywords) {
+            if (cleaned.includes(keyword)) score++;
+          }
+          if (score > bestScore) {
+            bestScore = score;
+            bestMatch = key;
+          }
+        }
+
+        return bestMatch || 'sad'; // Default
+      }
+
+      if (analyzeBtn && journalEntry && journalResult) {
+        analyzeBtn.addEventListener('click', () => {
+          const text = journalEntry.value.trim();
+          if (!text) return;
+
+          const matchKey = analyzeJournal(text);
+          const match = journalMap[matchKey];
+
+          document.getElementById('matched-feeling').textContent = match.label;
+          document.getElementById('matched-verse').textContent = match.verse;
+          document.getElementById('matched-ref').textContent = match.ref;
+          document.getElementById('matched-story').textContent = match.story;
+          document.getElementById('matched-help').textContent = match.help;
+          document.getElementById('matched-prayer').textContent = match.prayer;
+
+          journalResult.classList.remove('hidden');
+          
+          // Save to localStorage
+          try {
+            localStorage.setItem('faithwalk_journal', text);
+          } catch (e) {}
+        });
+      }
+
+      if (clearBtn && journalEntry) {
+        clearBtn.addEventListener('click', () => {
+          journalEntry.value = '';
+          if (journalResult) journalResult.classList.add('hidden');
+          try {
+            localStorage.removeItem('faithwalk_journal');
+          } catch (e) {}
+        });
+      }
+
+      // Load saved journal
+      if (journalEntry) {
+        try {
+          const saved = localStorage.getItem('faithwalk_journal');
+          if (saved) journalEntry.value = saved;
+        } catch (e) {}
+      }
+
+      // Prayer buttons
       const prayers = {
-        overwhelmed: 'God, everything feels heavy right now. Please steady my heart.',
-        numb: 'God, I feel distant and quiet inside. Meet me here.',
-        grateful: 'God, thank You for walking with me today.'
+        overwhelmed: 'God, everything feels heavy right now. I\'m carrying more than I can hold. I come to You—not because I have it together, but because You invited me. Teach me what to release and what to leave for tomorrow. Let Your presence steady my anxious heart. Amen.',
+        lonely: 'God who sees me, meet me in this loneliness. I feel forgotten and unseen by the people around me. Remind me that Your presence is real, even when I can\'t feel it. Let me know I\'m not alone. Speak to the ache in my heart. Amen.',
+        grateful: 'God, thank You. Thank You for walking with me today, for holding me together, for the small mercies I almost missed. Help me remember Your faithfulness when my feelings shift again. Let gratitude be my anchor. Amen.'
       };
 
       document.querySelectorAll('.prayer-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const key = btn.dataset.prayer;
-          if (prayerText) prayerText.textContent = prayers[key] || '';
-          if (prayerOutput) prayerOutput.classList.remove('hidden');
+          const prayerOutput = document.getElementById('prayer-output');
+          const prayerText = document.getElementById('prayer-text');
+          if (prayerOutput && prayerText) {
+            prayerText.textContent = prayers[key] || '';
+            prayerOutput.classList.remove('hidden');
+            prayerOutput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
         });
       });
 
-      // ---------- MOOD TINTING (safe class replace) ----------
-      const gradients = {
-        peace: ['from-pink-50','via-white','to-white'],
-        tired: ['from-rose-100','via-pink-50','to-white'],
-        anxious: ['from-pink-200','via-pink-100','to-white'],
-        hopeful: ['from-amber-50','via-pink-50','to-white']
-      };
-      const allGradientClasses = Array.from(new Set(Object.values(gradients).flat().concat(['from-pink-50','via-pink-100','to-white'])));
-
-      document.querySelectorAll('.mood-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.body.classList.remove(...allGradientClasses);
-          const mood = btn.dataset.mood;
-          if (gradients[mood]) document.body.classList.add(...gradients[mood]);
-        });
-      });
-
-      if (resetMoodBtn) {
-        resetMoodBtn.addEventListener('click', () => {
-          document.body.classList.remove(...allGradientClasses);
-          document.body.classList.add('from-pink-50','via-pink-100','to-white');
-        });
-      }
-
-      // ---------- JOURNAL "AI" (client-side matcher) + LOCAL SAVE ----------
-      const analyzeBtn = document.getElementById('analyze-journal');
-      const clearBtn = document.getElementById('clear-journal');
-      const entry = document.getElementById('journal-entry');
-      const result = document.getElementById('journal-result');
-
-      const matchedFeeling = document.getElementById('matched-feeling');
-      const confidenceEl = document.getElementById('confidence');
-      const matchedVerse = document.getElementById('matched-verse');
-      const matchedRef = document.getElementById('matched-ref');
-      const matchedStory = document.getElementById('matched-story');
-      const matchedHelp = document.getElementById('matched-help');
-      const matchedPrayer = document.getElementById('matched-prayer');
-
-      const STORAGE_KEY = 'faithwalk_journal_v1';
-      const HISTORY_KEY = 'faithwalk_journal_history_v1';
-
-      const journalMap = {
-        anxious: {
-          label: 'Anxious / afraid',
-          keywords: ['anxious','panic','worried','worry','fear','scared','terrified','nervous','dread','overthinking','overthink','spiral','racing','unsafe','what if','afraid'],
-          verse: '“Cast all your anxiety on Him because He cares for you.”',
-          ref: '1 Peter 5:7',
-          verses: [
-            { text: '"Cast all your anxiety on Him because He cares for you."', ref: '1 Peter 5:7' },
-            { text: '"Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God."', ref: 'Philippians 4:6' },
-            { text: '"When anxiety was great within me, your consolation brought me joy."', ref: 'Psalm 94:19' }
-          ],
-          story: 'David often wrote from fear and distress (see many Psalms). He brought the fear to God instead of pretending it wasn’t there.',
-          help: 'God invites you to hand Him the mental load piece by piece — not after you “calm down,” but while you’re still shaky.',
-          prayer: 'God, my mind is loud. Hold me steady. I give You what I keep replaying. Help me breathe and trust You in this moment.'
-        },
-        overwhelmed: {
-          label: 'Overwhelmed',
-          keywords: ['overwhelmed','too much','cant do this','exhausted','burned out','burnt out','stressed','stress','pressure','drowning','tired of','done'],
-          verse: '“Come to Me, all who are weary and burdened, and I will give you rest.”',
-          ref: 'Matthew 11:28',
-          verses: [
-            { text: '"Come to Me, all who are weary and burdened, and I will give you rest."', ref: 'Matthew 11:28' },
-            { text: '"He gives strength to the weary and increases the power of the weak."', ref: 'Isaiah 40:29' },
-            { text: '"My grace is sufficient for you, for my power is made perfect in weakness."', ref: '2 Corinthians 12:9' }
-          ],
-          story: 'Moses hit a breaking point under responsibility and cried out to God (Numbers 11). He wasn’t punished for being honest — he was helped.',
-          help: 'God meets you in the weight, not after you prove you can carry it. Rest is an invitation, not a reward.',
-          prayer: 'Jesus, I’m carrying more than I can hold. I come to You. Teach me what to release and what to leave for tomorrow.'
-        },
-        sad: {
-          label: 'Sad / grieving',
-          keywords: ['sad','cry','crying','tears','grief','grieving','heartbroken','broken','depressed','hopeless','empty','mourning','lost','hurt','hurting','pain'],
-          verse: '“The Lord is near to the brokenhearted and saves the crushed in spirit.”',
-          ref: 'Psalm 34:18',
-          verses: [
-            { text: '"The Lord is near to the brokenhearted and saves the crushed in spirit."', ref: 'Psalm 34:18' },
-            { text: '"He heals the brokenhearted and binds up their wounds."', ref: 'Psalm 147:3' },
-            { text: '"Blessed are those who mourn, for they will be comforted."', ref: 'Matthew 5:4' }
-          ],
-          story: 'Hannah poured out her soul in bitterness and tears before the Lord (1 Samuel 1). God saw her privately.',
-          help: 'God doesn’t rush you past grief. He comes close, stays near, and holds what you can’t fix.',
-          prayer: 'God, my heart hurts. Stay close to me. Hold what I can’t carry. Let Your nearness be enough for today.'
-        },
-        angry: {
-          label: 'Angry / frustrated',
-          keywords: ['angry','mad','furious','frustrated','irritated','rage','fed up','why','unfair','resent','resentment','annoyed','bitter'],
-          verse: '“The Lord is compassionate and gracious, slow to anger, abounding in love.”',
-          ref: 'Psalm 103:8',
-          verses: [
-            { text: '"The Lord is compassionate and gracious, slow to anger, abounding in love."', ref: 'Psalm 103:8' },
-            { text: '"In your anger do not sin: Do not let the sun go down while you are still angry."', ref: 'Ephesians 4:26' },
-            { text: '"A gentle answer turns away wrath, but a harsh word stirs up anger."', ref: 'Proverbs 15:1' }
-          ],
-          story: 'Jonah was angry with God and said it out loud (Jonah 4). God still engaged him and questioned his heart gently.',
-          help: 'God can handle your honesty. He invites you to bring the heat to Him, then helps you sort what’s underneath it.',
-          prayer: 'God, I’m angry. I don’t want to fake peace. Help me see what’s under this and lead me into truth and calm.'
-        },
-        shame: {
-          label: 'Shame / guilt',
-          keywords: ['ashamed','shame','guilty','guilt','dirty','worthless','failure','i messed up','regret','condemnation','unworthy','mistake'],
-          verse: '“There is now no condemnation for those who are in Christ Jesus.”',
-          ref: 'Romans 8:1',
-          verses: [
-            { text: '"There is now no condemnation for those who are in Christ Jesus."', ref: 'Romans 8:1' },
-            { text: '"As far as the east is from the west, so far has he removed our transgressions from us."', ref: 'Psalm 103:12' },
-            { text: '"If we confess our sins, he is faithful and just and will forgive us our sins."', ref: '1 John 1:9' }
-          ],
-          story: 'Peter denied Jesus and wept bitterly — and Jesus restored him (John 21). Failure wasn’t the end of Peter’s story.',
-          help: 'God doesn’t shame you into change; He loves you into healing. Conviction draws you near — condemnation pushes you away.',
-          prayer: 'Jesus, I feel heavy with guilt. I receive Your mercy. Wash me clean and help me walk forward with You.'
-        },
-        lonely: {
-          label: 'Lonely / unseen',
-          keywords: ['lonely','alone','unseen','ignored','no one','nobody','isolated','left out','abandoned','rejected','forgotten','invisible'],
-          verse: '“I will never leave you nor forsake you.”',
-          ref: 'Hebrews 13:5',
-          verses: [
-            { text: '"I will never leave you nor forsake you."', ref: 'Hebrews 13:5' },
-            { text: '"The Lord is close to the brokenhearted and saves those who are crushed in spirit."', ref: 'Psalm 34:18' },
-            { text: '"Turn to me and be gracious to me, for I am lonely and afflicted."', ref: 'Psalm 25:16' }
-          ],
-          story: 'Hagar felt unseen in the wilderness, and she named God “the God who sees me” (Genesis 16).',
-          help: 'God notices you in the places other people don’t. His presence is not dependent on someone else showing up.',
-          prayer: 'God who sees me, meet me in this loneliness. Remind me I’m not forgotten. Let Your presence feel real to me.'
-        },
-        doubtful: {
-          label: 'Doubting / distant from God',
-          keywords: ['doubt','doubting','distant','far','doesnt love','doesnt hear','doesnt care','where are you','silent','silence','unanswered','not listening','doesnt listen','doesnt understand'],
-          verse: '"The Lord is near to all who call on him, to all who call on him in truth."',
-          ref: 'Psalm 145:18',
-          verses: [
-            { text: '"The Lord is near to all who call on him, to all who call on him in truth."', ref: 'Psalm 145:18' },
-            { text: '"You will seek me and find me when you seek me with all your heart."', ref: 'Jeremiah 29:13' },
-            { text: '"For I am convinced that neither death nor life... will be able to separate us from the love of God."', ref: 'Romans 8:38-39' }
-          ],
-          story: 'Thomas doubted until he saw Jesus (John 20). Jesus did not condemn him — He showed up and invited Thomas to believe.',
-          help: 'God meets you in your questions and doubts. He is not threatened by your honesty, and His love does not depend on your certainty.',
-          prayer: 'God, I am struggling to feel You near. Meet me in this doubt. Help me trust that You hear me even when I cannot sense You.'
-        },
-        grateful: {
-          label: 'Grateful / hopeful',
-          keywords: ['grateful','thankful','blessed','hope','hopeful','joy','peace','calm','good','better','thank you','amazing','wonderful'],
-          verse: '“Give thanks to the Lord, for He is good; His love endures forever.”',
-          ref: 'Psalm 136:1',
-          verses: [
-            { text: '"Give thanks to the Lord, for He is good; His love endures forever."', ref: 'Psalm 136:1' },
-            { text: '"Rejoice always, pray continually, give thanks in all circumstances."', ref: '1 Thessalonians 5:16-18' },
-            { text: '"This is the day the Lord has made; let us rejoice and be glad in it."', ref: 'Psalm 118:24' }
-          ],
-          story: 'Mary treasured and pondered the work of God in her heart (Luke 2). Gratitude became a way of remembering.',
-          help: 'God uses gratitude like an anchor — not to deny hard things, but to keep you rooted in what is still true.',
-          prayer: 'God, thank You for the good I can see today. Help me remember Your faithfulness when my feelings shift again.'
-        }
-      };
-
-      // Track verse usage per sentiment to enable rotation
-      const verseUsageMap = {};
-
-      function scoreText(text, keywords) {
-        const t = (text || '').toLowerCase();
-        let score = 0;
-        for (const k of keywords) {
-          if (t.includes(k)) score += 1;
-        }
-        return score;
-      }
-
-      function analyzeJournal(text) {
-        const cleaned = (text || '').trim();
-        if (!cleaned) return { key: null, score: 0 };
-
-        let bestKey = null;
-        let bestScore = 0;
-        const scores = {};
-        
-        for (const [key, cfg] of Object.entries(journalMap)) {
-          const s = scoreText(cleaned, cfg.keywords);
-          scores[key] = s;
-          if (s > bestScore) {
-            bestScore = s;
-            bestKey = key;
-          }
-        }
-
-        // If no match found or score is 0, pick a reasonable default randomly
-        if (!bestKey || bestScore === 0) {
-          const defaultOptions = ['sad', 'anxious', 'doubtful'];
-          bestKey = defaultOptions[Math.floor(Math.random() * defaultOptions.length)];
-          bestScore = 0;
-        }
-        
-        // Handle ties by prioritizing certain sentiments
-        const tiedKeys = Object.keys(scores).filter(k => scores[k] === bestScore && scores[k] > 0);
-        if (tiedKeys.length > 1) {
-          // Prioritize more specific sentiments
-          const priority = ['doubtful', 'lonely', 'sad', 'anxious', 'shame', 'angry', 'overwhelmed', 'grateful'];
-          for (const prioKey of priority) {
-            if (tiedKeys.includes(prioKey)) {
-              bestKey = prioKey;
-              break;
-            }
-          }
-        }
-        
-        return { key: bestKey, score: bestScore };
-      }
-
-      function showJournalResult(key, score) {
-        const cfg = journalMap[key];
-        if (!cfg || !result) return;
-
-        if (matchedFeeling) matchedFeeling.textContent = cfg.label;
-        const conf = score >= 4 ? 'High match' : score >= 2 ? 'Medium match' : 'Gentle guess';
-        if (confidenceEl) confidenceEl.textContent = conf;
-
-        // Handle verse rotation - pick a verse we haven't shown recently
-        let selectedVerse;
-        if (cfg.verses && cfg.verses.length > 0) {
-          // Initialize usage tracking for this sentiment if not exists
-          if (!verseUsageMap[key]) {
-            verseUsageMap[key] = { lastIndex: -1, count: 0 };
-          }
-          
-          const usage = verseUsageMap[key];
-          let verseIndex;
-          
-          // If we have multiple verses, rotate through them
-          if (cfg.verses.length > 1) {
-            verseIndex = (usage.lastIndex + 1) % cfg.verses.length;
-          } else {
-            verseIndex = 0;
-          }
-          
-          usage.lastIndex = verseIndex;
-          usage.count++;
-          selectedVerse = cfg.verses[verseIndex];
-          
-          if (matchedVerse) matchedVerse.textContent = selectedVerse.text;
-          if (matchedRef) matchedRef.textContent = selectedVerse.ref;
-        } else {
-          // Fallback for old format (single verse/ref properties)
-          selectedVerse = { text: cfg.verse, ref: cfg.ref };
-          if (matchedVerse) matchedVerse.textContent = cfg.verse;
-          if (matchedRef) matchedRef.textContent = cfg.ref;
-        }
-        
-        if (matchedStory) matchedStory.textContent = cfg.story;
-        if (matchedHelp) matchedHelp.textContent = cfg.help;
-        if (matchedPrayer) matchedPrayer.textContent = cfg.prayer;
-
-        result.classList.remove('hidden');
-        result.classList.add('fade-in');
-        
-        return selectedVerse; // Return for saving to history
-      }
-
-      // Restore saved journal entry on load
-      if (entry) {
-        try {
-          const saved = localStorage.getItem(STORAGE_KEY);
-          if (saved) entry.value = saved;
-        } catch (e) {
-          // If storage is blocked, just skip saving.
-        }
-      }
-
-      // Journal history functions
-      function saveJournalEntry(text, emotionKey, emotionLabel, score, selectedVerse) {
-        try {
-          const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
-          const cfg = journalMap[emotionKey];
-          const newEntry = {
-            id: Date.now(),
-            date: new Date().toISOString(),
-            text: text,
-            emotion: emotionLabel,
-            emotionKey: emotionKey,
-            score: score,
-            verse: selectedVerse?.text || cfg?.verse || '',
-            ref: selectedVerse?.ref || cfg?.ref || '',
-            story: cfg?.story || '',
-            help: cfg?.help || '',
-            prayer: cfg?.prayer || ''
-          };
-          history.unshift(newEntry); // Add to beginning
-          // Keep only last 20 entries
-          if (history.length > 20) history.length = 20;
-          localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
-          updateHistoryDisplay();
-        } catch (e) {
-          console.error('Failed to save journal entry:', e);
-        }
-      }
-
-      function deleteJournalEntry(id) {
-        try {
-          const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
-          const filtered = history.filter(e => e.id !== id);
-          localStorage.setItem(HISTORY_KEY, JSON.stringify(filtered));
-          updateHistoryDisplay();
-        } catch (e) {
-          console.error('Failed to delete entry:', e);
-        }
-      }
-
-      function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-      }
-
-      function formatDate(isoDate) {
-        const date = new Date(isoDate);
-        const now = new Date();
-        const diffMs = now - date;
-        const diffMins = Math.floor(diffMs / 60000);
-        const diffHours = Math.floor(diffMs / 3600000);
-        const diffDays = Math.floor(diffMs / 86400000);
-        
-        // Handle future dates (clock skew)
-        if (diffMs < 0) return 'Just now';
-        
-        if (diffMins < 60) return diffMins < 1 ? 'Just now' : `${diffMins} mins ago`;
-        if (diffHours < 24) return diffHours === 1 ? '1 hour ago' : `${diffHours} hours ago`;
-        if (diffDays < 7) return diffDays === 1 ? 'Yesterday' : `${diffDays} days ago`;
-        
-        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-      }
-
-      function updateHistoryDisplay() {
-        const historyContainer = document.getElementById('journal-history');
-        const historySection = document.getElementById('journal-history-section');
-        if (!historyContainer || !historySection) return;
-
-        try {
-          const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
-          
-          if (history.length === 0) {
-            historySection.classList.add('hidden');
-            return;
-          }
-
-          historySection.classList.remove('hidden');
-          
-          historyContainer.innerHTML = history.map(entry => `
-            <div class="bg-white/70 border border-amber-200 rounded-xl p-3 space-y-2 fade-in">
-              <div class="flex justify-between items-start gap-2">
-                <div class="flex-1">
-                  <p class="text-xs text-rose-400">${escapeHtml(formatDate(entry.date))}</p>
-                  <p class="text-sm mt-1 text-rose-800">${escapeHtml(entry.text.substring(0, 100))}${entry.text.length > 100 ? '...' : ''}</p>
-                </div>
-                <button data-delete-id="${entry.id}" class="delete-entry-btn text-rose-400 hover:text-rose-600 text-xs">×</button>
-              </div>
-              <div class="border-t border-amber-100 pt-2 space-y-1">
-                <p class="text-xs"><span class="text-rose-500">Feeling:</span> <span class="font-medium">${escapeHtml(entry.emotion)}</span></p>
-                <p class="text-xs text-rose-700">${escapeHtml(entry.verse)} <span class="text-rose-400">${escapeHtml(entry.ref)}</span></p>
-              </div>
-            </div>
-          `).join('');
-        } catch (e) {
-          console.error('Failed to display history:', e);
-        }
-      }
-
-      // Toggle history visibility
-      const toggleHistoryBtn = document.getElementById('toggle-history');
-      const historyDisplay = document.getElementById('journal-history');
-      if (toggleHistoryBtn && historyDisplay) {
-        toggleHistoryBtn.addEventListener('click', () => {
-          const isHidden = historyDisplay.classList.toggle('hidden');
-          toggleHistoryBtn.textContent = isHidden ? 'Show history' : 'Hide history';
-        });
-      }
-
-      // Event delegation for delete buttons (avoids memory leaks)
-      if (historyDisplay) {
-        historyDisplay.addEventListener('click', (e) => {
-          if (e.target.classList.contains('delete-entry-btn')) {
-            const id = parseInt(e.target.dataset.deleteId, 10);
-            if (!isNaN(id)) deleteJournalEntry(id);
-          }
-        });
-      }
-
-      // Load history on page load
-      updateHistoryDisplay();
-
-      // Analyze button: save locally + match + display + save to history
-      if (analyzeBtn && entry) {
-        analyzeBtn.addEventListener('click', () => {
-          const text = entry.value.trim();
-          if (!text) return;
-          
-          try { localStorage.setItem(STORAGE_KEY, text); } catch (e) {}
-          const { key, score } = analyzeJournal(text);
-          if (!key) return;
-          
-          const cfg = journalMap[key];
-          const selectedVerse = showJournalResult(key, score);
-          saveJournalEntry(text, key, cfg.label, score, selectedVerse);
-        });
-      }
-
-      // Clear button: wipe entry + local save + results
-      if (clearBtn && entry) {
-        clearBtn.addEventListener('click', () => {
-          entry.value = '';
-          try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-          if (result) result.classList.add('hidden');
-        });
-      }
-
-      // ---------- TESTS (keep existing intent; add more) ----------
-      console.assert(document.getElementById('evening-prayer'), 'Evening prayer section missing');
-      console.assert(versePool.length > dailyVerses.length, 'Verse pool should be larger than daily verses');
-      console.assert(!!document.getElementById('next-verse'), 'Missing #next-verse button');
-      console.assert(!!document.getElementById('scripture-text') && !!document.getElementById('scripture-ref'), 'Scripture elements missing');
-      console.assert(typeof renderVerse === 'function', 'renderVerse should be a function');
-      console.assert(!!document.getElementById('journal-entry'), 'Missing #journal-entry textarea');
-      console.assert(!!document.getElementById('analyze-journal'), 'Missing #analyze-journal button');
-      console.assert(typeof analyzeJournal === 'function', 'analyzeJournal should be a function');
-      console.assert(typeof showJournalResult === 'function', 'showJournalResult should be a function');
-      console.assert(typeof scoreText === 'function', 'scoreText should be a function');
-      console.assert(typeof localStorage !== 'undefined', 'localStorage should be available');
     })();
+
+    // Helper functions for interactive features
+    function scrollToSection(id) {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function usePrompt(promptText) {
+      const journalEntry = document.getElementById('journal-entry');
+      if (journalEntry) {
+        journalEntry.value = promptText + '\n\n';
+        journalEntry.focus();
+        journalEntry.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function shareToCommunity() {
+      const shareText = document.getElementById('community-share');
+      if (shareText && shareText.value.trim()) {
+        alert('Thank you for sharing! In a full version, this would post to a moderated community feed.');
+        shareText.value = '';
+      }
+    }
+
+    function loadNewDevotional() {
+      const devotionals = [
+        {
+          title: 'When Anxiety Feels Overwhelming',
+          content: `<p>Anxiety doesn't mean your faith is weak. It means you're human, navigating a broken world with a tender heart. Even Jesus experienced deep distress in the Garden of Gethsemane.</p>
+          
+          <div class="scripture-display">
+            <p class="scripture-text">"He began to be deeply distressed and troubled. 'My soul is overwhelmed with sorrow,' he said to them."</p>
+            <p class="scripture-ref">Mark 14:33-34</p>
+          </div>
+          
+          <p>God doesn't ask you to fix your anxiety before coming to Him. He invites you to bring it—all of it—and let Him hold it with you.</p>
+          
+          <p><strong>Today's Invitation:</strong> Name one thing you're anxious about. Then imagine handing it to God, piece by piece, trusting He can carry what you cannot.</p>`
+        },
+        {
+          title: 'The Gift of Lament',
+          content: `<p>The Psalms teach us something countercultural: it's okay to tell God when things are not okay. Lament is not the opposite of faith—it's faith crying out for help.</p>
+          
+          <div class="scripture-display">
+            <p class="scripture-text">"How long, Lord? Will you forget me forever? How long will you hide your face from me?"</p>
+            <p class="scripture-ref">Psalm 13:1</p>
+          </div>
+          
+          <p>David asked God hard questions. He didn't fake joy when he felt despair. And God met him there.</p>
+          
+          <p><strong>Today's Invitation:</strong> If something in your life feels unfair or unbearable, tell God. Don't edit it. Don't soften it. Just be honest.</p>`
+        }
+      ];
+      
+      const randomDevo = devotionals[Math.floor(Math.random() * devotionals.length)];
+      document.getElementById('devotional-title').textContent = randomDevo.title;
+      document.getElementById('devotional-content').innerHTML = randomDevo.content;
+    }
+
+    function startBreathPrayer() {
+      alert('Breathe slowly. Inhale: "Be still" — Exhale: "And know." Repeat for 2 minutes. Let God\'s peace settle over you.');
+    }
+
+    function loadMeditationVerse() {
+      const verses = [
+        { text: '"The Lord is my shepherd; I shall not want."', ref: 'Psalm 23:1' },
+        { text: '"Be still, and know that I am God."', ref: 'Psalm 46:10' },
+        { text: '"I am with you always, to the very end of the age."', ref: 'Matthew 28:20' },
+        { text: '"Come to me, all you who are weary and burdened."', ref: 'Matthew 11:28' }
+      ];
+      const verse = verses[Math.floor(Math.random() * verses.length)];
+      document.getElementById('meditation-verse').textContent = verse.text;
+      document.getElementById('meditation-ref').textContent = verse.ref;
+    }
+
+    function saveGratitude() {
+      const gratitudeList = document.getElementById('gratitude-list');
+      if (gratitudeList && gratitudeList.value.trim()) {
+        alert('Your gratitude has been saved to your heart. May it anchor you in truth.');
+        try {
+          const saved = JSON.parse(localStorage.getItem('faithwalk_gratitude') || '[]');
+          saved.unshift({ date: new Date().toISOString(), text: gratitudeList.value });
+          localStorage.setItem('faithwalk_gratitude', JSON.stringify(saved.slice(0, 20)));
+        } catch (e) {}
+        gratitudeList.value = '';
+      }
+    }
   </script>
 
 </body>
