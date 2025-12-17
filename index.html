@@ -502,7 +502,7 @@
       const journalMap = {
         anxious: {
           label: 'Anxious / afraid',
-          keywords: ['anxious','panic','worried','worry','fear','scared','terrified','nervous','dread','overthinking','overthink','spiral','racing','unsafe'],
+          keywords: ['anxious','panic','worried','worry','fear','scared','terrified','nervous','dread','overthinking','overthink','spiral','racing','unsafe','what if','afraid'],
           verse: '“Cast all your anxiety on Him because He cares for you.”',
           ref: '1 Peter 5:7',
           story: 'David often wrote from fear and distress (see many Psalms). He brought the fear to God instead of pretending it wasn’t there.',
@@ -511,7 +511,7 @@
         },
         overwhelmed: {
           label: 'Overwhelmed',
-          keywords: ['overwhelmed','too much','can\'t do this','cant do this','exhausted','burned out','burnt out','stressed','stress','pressure','drowning','tired of','done'],
+          keywords: ['overwhelmed','too much','cant do this','exhausted','burned out','burnt out','stressed','stress','pressure','drowning','tired of','done'],
           verse: '“Come to Me, all who are weary and burdened, and I will give you rest.”',
           ref: 'Matthew 11:28',
           story: 'Moses hit a breaking point under responsibility and cried out to God (Numbers 11). He wasn’t punished for being honest — he was helped.',
@@ -520,7 +520,7 @@
         },
         sad: {
           label: 'Sad / grieving',
-          keywords: ['sad','cry','crying','tears','grief','grieving','heartbroken','broken','depressed','hopeless','empty','mourning','lost'],
+          keywords: ['sad','cry','crying','tears','grief','grieving','heartbroken','broken','depressed','hopeless','empty','mourning','lost','hurt','hurting','pain'],
           verse: '“The Lord is near to the brokenhearted and saves the crushed in spirit.”',
           ref: 'Psalm 34:18',
           story: 'Hannah poured out her soul in bitterness and tears before the Lord (1 Samuel 1). God saw her privately.',
@@ -529,7 +529,7 @@
         },
         angry: {
           label: 'Angry / frustrated',
-          keywords: ['angry','mad','furious','frustrated','irritated','rage','fed up','why','unfair','resent','resentment'],
+          keywords: ['angry','mad','furious','frustrated','irritated','rage','fed up','why','unfair','resent','resentment','annoyed','bitter'],
           verse: '“The Lord is compassionate and gracious, slow to anger, abounding in love.”',
           ref: 'Psalm 103:8',
           story: 'Jonah was angry with God and said it out loud (Jonah 4). God still engaged him and questioned his heart gently.',
@@ -538,7 +538,7 @@
         },
         shame: {
           label: 'Shame / guilt',
-          keywords: ['ashamed','shame','guilty','guilt','dirty','worthless','failure','i messed up','regret','condemnation'],
+          keywords: ['ashamed','shame','guilty','guilt','dirty','worthless','failure','i messed up','regret','condemnation','unworthy','mistake'],
           verse: '“There is now no condemnation for those who are in Christ Jesus.”',
           ref: 'Romans 8:1',
           story: 'Peter denied Jesus and wept bitterly — and Jesus restored him (John 21). Failure wasn’t the end of Peter’s story.',
@@ -547,16 +547,25 @@
         },
         lonely: {
           label: 'Lonely / unseen',
-          keywords: ['lonely','alone','unseen','ignored','no one','nobody','isolated','left out','abandoned','rejected'],
+          keywords: ['lonely','alone','unseen','ignored','no one','nobody','isolated','left out','abandoned','rejected','forgotten','invisible'],
           verse: '“I will never leave you nor forsake you.”',
           ref: 'Hebrews 13:5',
           story: 'Hagar felt unseen in the wilderness, and she named God “the God who sees me” (Genesis 16).',
           help: 'God notices you in the places other people don’t. His presence is not dependent on someone else showing up.',
           prayer: 'God who sees me, meet me in this loneliness. Remind me I’m not forgotten. Let Your presence feel real to me.'
         },
+        doubtful: {
+          label: 'Doubting / distant from God',
+          keywords: ['doubt','doubting','distant','far','doesnt love','doesnt hear','doesnt care','where are you','silent','silence','unanswered','not listening','doesnt listen','doesnt understand'],
+          verse: '"The Lord is near to all who call on him, to all who call on him in truth."',
+          ref: 'Psalm 145:18',
+          story: 'Thomas doubted until he saw Jesus (John 20). Jesus did not condemn him — He showed up and invited Thomas to believe.',
+          help: 'God meets you in your questions and doubts. He is not threatened by your honesty, and His love does not depend on your certainty.',
+          prayer: 'God, I am struggling to feel You near. Meet me in this doubt. Help me trust that You hear me even when I cannot sense You.'
+        },
         grateful: {
           label: 'Grateful / hopeful',
-          keywords: ['grateful','thankful','blessed','hope','hopeful','joy','peace','calm','good','better'],
+          keywords: ['grateful','thankful','blessed','hope','hopeful','joy','peace','calm','good','better','thank you','amazing','wonderful'],
           verse: '“Give thanks to the Lord, for He is good; His love endures forever.”',
           ref: 'Psalm 136:1',
           story: 'Mary treasured and pondered the work of God in her heart (Luke 2). Gratitude became a way of remembering.',
@@ -580,15 +589,37 @@
 
         let bestKey = null;
         let bestScore = 0;
+        const scores = {};
+        
         for (const [key, cfg] of Object.entries(journalMap)) {
           const s = scoreText(cleaned, cfg.keywords);
+          scores[key] = s;
           if (s > bestScore) {
             bestScore = s;
             bestKey = key;
           }
         }
 
-        if (!bestKey) return { key: 'overwhelmed', score: 0 };
+        // If no match found or score is 0, pick a reasonable default randomly
+        if (!bestKey || bestScore === 0) {
+          const defaultOptions = ['sad', 'anxious', 'doubtful'];
+          bestKey = defaultOptions[Math.floor(Math.random() * defaultOptions.length)];
+          bestScore = 0;
+        }
+        
+        // Handle ties by prioritizing certain sentiments
+        const tiedKeys = Object.keys(scores).filter(k => scores[k] === bestScore && scores[k] > 0);
+        if (tiedKeys.length > 1) {
+          // Prioritize more specific sentiments
+          const priority = ['doubtful', 'lonely', 'sad', 'anxious', 'shame', 'angry', 'overwhelmed', 'grateful'];
+          for (const prioKey of priority) {
+            if (tiedKeys.includes(prioKey)) {
+              bestKey = prioKey;
+              break;
+            }
+          }
+        }
+        
         return { key: bestKey, score: bestScore };
       }
 
