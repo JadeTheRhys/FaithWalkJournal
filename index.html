@@ -424,6 +424,12 @@
         }
       }
 
+      function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
       function formatDate(isoDate) {
         const date = new Date(isoDate);
         const now = new Date();
@@ -458,20 +464,25 @@
             <div class="bg-white/70 border border-amber-200 rounded-xl p-3 space-y-2 fade-in">
               <div class="flex justify-between items-start gap-2">
                 <div class="flex-1">
-                  <p class="text-xs text-rose-400">${formatDate(entry.date)}</p>
-                  <p class="text-sm mt-1 text-rose-800">${entry.text.substring(0, 100)}${entry.text.length > 100 ? '...' : ''}</p>
+                  <p class="text-xs text-rose-400">${escapeHtml(formatDate(entry.date))}</p>
+                  <p class="text-sm mt-1 text-rose-800">${escapeHtml(entry.text.substring(0, 100))}${entry.text.length > 100 ? '...' : ''}</p>
                 </div>
-                <button onclick="deleteJournalEntry(${entry.id})" class="text-rose-400 hover:text-rose-600 text-xs">×</button>
+                <button data-delete-id="${entry.id}" class="delete-entry-btn text-rose-400 hover:text-rose-600 text-xs">×</button>
               </div>
               <div class="border-t border-amber-100 pt-2 space-y-1">
-                <p class="text-xs"><span class="text-rose-500">Feeling:</span> <span class="font-medium">${entry.emotion}</span></p>
-                <p class="text-xs text-rose-700">${entry.verse} <span class="text-rose-400">${entry.ref}</span></p>
+                <p class="text-xs"><span class="text-rose-500">Feeling:</span> <span class="font-medium">${escapeHtml(entry.emotion)}</span></p>
+                <p class="text-xs text-rose-700">${escapeHtml(entry.verse)} <span class="text-rose-400">${escapeHtml(entry.ref)}</span></p>
               </div>
             </div>
           `).join('');
 
-          // Make delete function globally accessible
-          window.deleteJournalEntry = deleteJournalEntry;
+          // Use event delegation for delete buttons
+          historyContainer.querySelectorAll('.delete-entry-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const id = parseInt(e.target.dataset.deleteId, 10);
+              if (!isNaN(id)) deleteJournalEntry(id);
+            });
+          });
         } catch (e) {
           console.error('Failed to display history:', e);
         }
