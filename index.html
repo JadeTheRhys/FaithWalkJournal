@@ -470,7 +470,7 @@
                   <p class="text-xs text-rose-400">${escapeHtml(formatDate(entry.date))}</p>
                   <p class="text-sm mt-1 text-rose-800">${escapeHtml(entry.text.substring(0, 100))}${entry.text.length > 100 ? '...' : ''}</p>
                 </div>
-                <button data-delete-id="${escapeHtml(String(entry.id))}" class="delete-entry-btn text-rose-400 hover:text-rose-600 text-xs">×</button>
+                <button data-delete-id="${entry.id}" class="delete-entry-btn text-rose-400 hover:text-rose-600 text-xs">×</button>
               </div>
               <div class="border-t border-amber-100 pt-2 space-y-1">
                 <p class="text-xs"><span class="text-rose-500">Feeling:</span> <span class="font-medium">${escapeHtml(entry.emotion)}</span></p>
