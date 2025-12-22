@@ -134,6 +134,7 @@
         <button type="submit" class="btn btn-primary w-full">Login</button>
       </form>
       <p class="mt-4 text-sm text-center text-gray-600">Default: admin / changeme123</p>
+      <p class="mt-2 text-xs text-center text-red-600 font-semibold">⚠️ Change default password after first login!</p>
     </div>
   </div>
 
@@ -177,6 +178,7 @@
         <button onclick="showTab('approved')" class="px-4 py-2 font-medium tab-btn" data-tab="approved">Approved Posts</button>
         <button onclick="showTab('rejected')" class="px-4 py-2 font-medium tab-btn" data-tab="rejected">Rejected Posts</button>
         <button onclick="showTab('filters')" class="px-4 py-2 font-medium tab-btn" data-tab="filters">Word Filters</button>
+        <button onclick="showTab('settings')" class="px-4 py-2 font-medium tab-btn" data-tab="settings">Settings</button>
       </div>
 
       <!-- Tab Content -->
@@ -206,6 +208,27 @@
           </form>
         </div>
         <div id="filters-list"></div>
+      </div>
+
+      <div id="tab-settings" class="tab-content hidden">
+        <div class="card">
+          <h2 class="text-xl font-bold mb-4">Change Password</h2>
+          <form id="password-form">
+            <div class="mb-4">
+              <label class="block text-sm font-medium mb-2">Current Password</label>
+              <input type="password" id="current-password" required class="w-full px-3 py-2 border rounded-md">
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium mb-2">New Password (min 8 characters)</label>
+              <input type="password" id="new-password" required minlength="8" class="w-full px-3 py-2 border rounded-md">
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium mb-2">Confirm New Password</label>
+              <input type="password" id="confirm-password" required class="w-full px-3 py-2 border rounded-md">
+            </div>
+            <button type="submit" class="btn btn-primary">Change Password</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -486,6 +509,41 @@
       div.textContent = text;
       return div.innerHTML;
     }
+
+    // Password change form
+    document.getElementById('password-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const currentPassword = document.getElementById('current-password').value;
+      const newPassword = document.getElementById('new-password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+
+      if (newPassword !== confirmPassword) {
+        alert('New passwords do not match!');
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_URL}/admin/change-password`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ currentPassword, newPassword })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          alert('Password changed successfully!');
+          document.getElementById('password-form').reset();
+        } else {
+          alert('Error: ' + data.error);
+        }
+      } catch (error) {
+        alert('Network error. Please try again.');
+      }
+    });
 
     // Auto-login if token exists
     if (authToken) {

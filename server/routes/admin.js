@@ -7,7 +7,7 @@ const { authenticateAdmin, generateToken } = require('../middleware/auth');
 /**
  * POST /api/admin/login - Admin login
  */
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
 
@@ -17,7 +17,13 @@ router.post('/login', (req, res) => {
 
     const user = db.prepare('SELECT * FROM admin_users WHERE username = ?').get(username);
 
-    if (!user || !bcrypt.compareSync(password, user.password_hash)) {
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    const isValid = await bcrypt.compare(password, user.password_hash);
+    
+    if (!isValid) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
@@ -238,6 +244,51 @@ router.get('/stats', authenticateAdmin, (req, res) => {
   } catch (error) {
     console.error('Error fetching stats:', error);
     res.status(500).json({ error: 'Failed to fetch stats' });
+  }
+});
+
+/**
+ * PUT /api/admin/change-password - Change admin password
+ */
+router.put('/change-password', authenticateAdmin, async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ error: 'Current and new password are required' });
+    }
+
+    if (newPassword.length < 8) {
+      return res.status(400).json({ error: 'New password must be at least 8 characters' });
+    }
+
+    // Get current user
+    const user = db.prepare('SELECT * FROM admin_users WHERE username = ?').get(req.admin.username);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Verify current password
+    const isValid = await bcrypt.compare(currentPassword, user.password_hash);
+    
+    if (!isValid) {
+      return res.status(401).json({ error: 'Current password is incorrect' });
+    }
+
+    // Hash new password
+    const newHash = await bcrypt.hash(newPassword, 10);
+
+    // Update password
+    db.prepare('UPDATE admin_users SET password_hash = ? WHERE username = ?').run(newHash, req.admin.username);
+
+    res.json({
+      success: true,
+      message: 'Password changed successfully'
+    });
+  } catch (error) {
+    console.error('Error changing password:', error);
+    res.status(500).json({ error: 'Failed to change password' });
   }
 });
 

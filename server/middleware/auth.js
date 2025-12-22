@@ -1,7 +1,13 @@
 const jwt = require('jsonwebtoken');
 
-// In production, use environment variable for secret
-const JWT_SECRET = process.env.JWT_SECRET || 'faithwalk-jwt-secret-change-in-production';
+// JWT secret - must be set in production
+const JWT_SECRET = process.env.JWT_SECRET || (() => {
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('JWT_SECRET environment variable must be set in production');
+  }
+  console.warn('WARNING: Using default JWT secret for development. Set JWT_SECRET in production!');
+  return 'faithwalk-jwt-secret-change-in-production';
+})();
 const JWT_EXPIRY = '8h';
 
 /**

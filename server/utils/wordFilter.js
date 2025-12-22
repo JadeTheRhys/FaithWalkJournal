@@ -1,5 +1,8 @@
 const db = require('../db/database');
 
+// Maximum content length
+const MAX_CONTENT_LENGTH = 2000;
+
 /**
  * Checks content against configured word filters
  * @param {string} content - The content to check
@@ -18,8 +21,10 @@ function checkContent(content) {
   const severityRank = { low: 1, medium: 2, high: 3 };
 
   for (const filter of filters) {
+    // Escape special regex characters to prevent ReDoS attacks
+    const escapedWord = filter.word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     // Check for whole word matches using word boundaries
-    const regex = new RegExp(`\\b${filter.word.toLowerCase()}\\b`, 'i');
+    const regex = new RegExp(`\\b${escapedWord}\\b`, 'i');
     if (regex.test(lowerContent)) {
       flaggedWords.push(filter.word);
       
@@ -58,8 +63,8 @@ function sanitizeContent(content) {
   sanitized = sanitized.trim();
 
   // Limit length
-  if (sanitized.length > 2000) {
-    sanitized = sanitized.substring(0, 2000);
+  if (sanitized.length > MAX_CONTENT_LENGTH) {
+    sanitized = sanitized.substring(0, MAX_CONTENT_LENGTH);
   }
 
   return sanitized;
@@ -67,5 +72,6 @@ function sanitizeContent(content) {
 
 module.exports = {
   checkContent,
-  sanitizeContent
+  sanitizeContent,
+  MAX_CONTENT_LENGTH
 };

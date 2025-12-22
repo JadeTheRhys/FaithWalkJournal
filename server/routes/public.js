@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db/database');
-const { checkContent, sanitizeContent } = require('../utils/wordFilter');
+const { checkContent, sanitizeContent, MAX_CONTENT_LENGTH } = require('../utils/wordFilter');
 
 /**
  * POST /api/posts - Submit an anonymous post
@@ -15,8 +15,8 @@ router.post('/posts', (req, res) => {
       return res.status(400).json({ error: 'Content is required' });
     }
 
-    if (content.length > 2000) {
-      return res.status(400).json({ error: 'Content must be 2000 characters or less' });
+    if (content.length > MAX_CONTENT_LENGTH) {
+      return res.status(400).json({ error: `Content must be ${MAX_CONTENT_LENGTH} characters or less` });
     }
 
     // Sanitize content
