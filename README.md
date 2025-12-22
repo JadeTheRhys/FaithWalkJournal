@@ -34,7 +34,9 @@ A spiritual journaling application with anonymous community sharing, automated m
 ### Prerequisites
 - Node.js 14+ and npm
 
-### Installation
+### Quick Start
+
+**⚠️ IMPORTANT: The server must be running to access the application!**
 
 1. Clone the repository:
 ```bash
@@ -52,6 +54,8 @@ npm install
 npm start
 ```
 
+**Keep the terminal window open** - the server must stay running while you use the application.
+
 The application will be available at:
 - Frontend: http://localhost:3000
 - Admin Dashboard: http://localhost:3000/admin
@@ -62,6 +66,13 @@ The application will be available at:
 - Password: `changeme123`
 
 **⚠️ IMPORTANT**: Change the default password immediately after first login!
+
+### Troubleshooting
+
+**Can't connect to http://localhost:3000/admin?**
+- Make sure you've run `npm start` and the server is running
+- Check the terminal for "FaithWalk Journal server running on port 3000"
+- See `START_SERVER.md` or `MODERATION_GUIDE.md` for detailed troubleshooting
 
 ## API Endpoints
 
