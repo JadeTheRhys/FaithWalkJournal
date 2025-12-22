@@ -519,7 +519,7 @@
     <div class="hero-content">
       <h1>Your Journey of Faith</h1>
       <p>A sacred space for reflection, connection, and spiritual growth. Walk with God through every season of life.</p>
-      <button class="primary" onclick="scrollToSection('journal')">Begin Your Journey</button>
+      <button class="primary" id="begin-journey-btn">Begin Your Journey</button>
     </div>
   </section>
 
@@ -638,22 +638,22 @@
         <h3>Guided Prompts</h3>
         <p>Not sure where to start? Try one of these reflections:</p>
         <ul class="prompt-list">
-          <li class="prompt-item" onclick="usePrompt('What am I grateful for today, even in the hard things?')">
+          <li class="prompt-item" data-prompt="What am I grateful for today, even in the hard things?">
             What am I grateful for today, even in the hard things?
           </li>
-          <li class="prompt-item" onclick="usePrompt('Where do I feel God\'s presence right now? Where do I feel His absence?')">
+          <li class="prompt-item" data-prompt="Where do I feel God's presence right now? Where do I feel His absence?">
             Where do I feel God's presence right now? Where do I feel His absence?
           </li>
-          <li class="prompt-item" onclick="usePrompt('What fear or worry am I carrying that I need to give to God?')">
+          <li class="prompt-item" data-prompt="What fear or worry am I carrying that I need to give to God?">
             What fear or worry am I carrying that I need to give to God?
           </li>
-          <li class="prompt-item" onclick="usePrompt('When have I felt seen and loved by God recently?')">
+          <li class="prompt-item" data-prompt="When have I felt seen and loved by God recently?">
             When have I felt seen and loved by God recently?
           </li>
-          <li class="prompt-item" onclick="usePrompt('What does my soul need most today? Rest? Courage? Hope?')">
+          <li class="prompt-item" data-prompt="What does my soul need most today? Rest? Courage? Hope?">
             What does my soul need most today? Rest? Courage? Hope?
           </li>
-          <li class="prompt-item" onclick="usePrompt('How have I experienced God\'s faithfulness in the past?')">
+          <li class="prompt-item" data-prompt="How have I experienced God's faithfulness in the past?">
             How have I experienced God's faithfulness in the past?
           </li>
         </ul>
@@ -692,7 +692,7 @@
         <p><strong>Today's Invitation:</strong> Bring God the places where you feel most unseen. Name them. He's already there, seeing you with perfect love.</p>
       </div>
       
-      <button onclick="loadNewDevotional()">Load Another Devotional</button>
+      <button id="load-devotional-btn">Load Another Devotional</button>
     </div>
   </div>
 
@@ -742,7 +742,7 @@
         <h3>Share Anonymously</h3>
         <p style="font-size: 0.9rem; margin-bottom: 1rem;">Share an insight, prayer request, or word of encouragement with others walking this journey.</p>
         <textarea id="community-share" rows="4" placeholder="What's God teaching you? What do you need prayer for?"></textarea>
-        <button onclick="shareToCommunity()" class="primary" style="margin-top: 1rem;">Share Anonymously</button>
+        <button id="share-community-btn" class="primary" style="margin-top: 1rem;">Share Anonymously</button>
         <div id="share-feedback" style="font-size: 0.85rem; margin-top: 0.5rem; font-style: italic;"></div>
       </div>
       
@@ -802,7 +802,7 @@
           <p style="font-size: 1.5rem; color: var(--earth-medium); font-family: 'Cormorant Garamond', serif; margin-bottom: 1rem;" id="breath-text">Breathe in: "Be still"</p>
           <p style="font-size: 1.5rem; color: var(--earth-medium); font-family: 'Cormorant Garamond', serif;">Breathe out: "And know"</p>
         </div>
-        <button onclick="startBreathPrayer()" style="margin-top: 1rem;">Start Guided Breathing</button>
+        <button id="start-breath-prayer-btn" style="margin-top: 1rem;">Start Guided Breathing</button>
       </div>
       
       <div class="card">
@@ -813,7 +813,7 @@
           <p class="scripture-ref" id="meditation-ref">Psalm 23:1</p>
         </div>
         <p style="margin-top: 1rem; font-size: 0.95rem;">Read this verse slowly three times. What word or phrase stands out to you?</p>
-        <button onclick="loadMeditationVerse()" style="margin-top: 1rem;">New Meditation Verse</button>
+        <button id="load-meditation-btn" style="margin-top: 1rem;">New Meditation Verse</button>
       </div>
       
       <div class="card">
@@ -822,7 +822,7 @@
         <textarea id="gratitude-list" rows="4" placeholder="1. 
 2. 
 3." style="margin-top: 1rem;"></textarea>
-        <button onclick="saveGratitude()" class="primary" style="margin-top: 1rem;">Save to Heart</button>
+        <button id="save-gratitude-btn" class="primary" style="margin-top: 1rem;">Save to Heart</button>
       </div>
       
     </div>
@@ -1157,6 +1157,44 @@
       
       // Refresh posts every 30 seconds for real-time sync
       setInterval(loadCommunityPosts, 30000);
+      
+      // Setup event listeners for buttons
+      const beginJourneyBtn = document.getElementById('begin-journey-btn');
+      if (beginJourneyBtn) {
+        beginJourneyBtn.addEventListener('click', () => scrollToSection('journal'));
+      }
+      
+      const loadDevotionalBtn = document.getElementById('load-devotional-btn');
+      if (loadDevotionalBtn) {
+        loadDevotionalBtn.addEventListener('click', loadNewDevotional);
+      }
+      
+      const shareCommunityBtn = document.getElementById('share-community-btn');
+      if (shareCommunityBtn) {
+        shareCommunityBtn.addEventListener('click', shareToCommunity);
+      }
+      
+      const startBreathPrayerBtn = document.getElementById('start-breath-prayer-btn');
+      if (startBreathPrayerBtn) {
+        startBreathPrayerBtn.addEventListener('click', startBreathPrayer);
+      }
+      
+      const loadMeditationBtn = document.getElementById('load-meditation-btn');
+      if (loadMeditationBtn) {
+        loadMeditationBtn.addEventListener('click', loadMeditationVerse);
+      }
+      
+      const saveGratitudeBtn = document.getElementById('save-gratitude-btn');
+      if (saveGratitudeBtn) {
+        saveGratitudeBtn.addEventListener('click', saveGratitude);
+      }
+      
+      // Setup prompt item click listeners
+      document.querySelectorAll('.prompt-item').forEach(item => {
+        item.addEventListener('click', () => {
+          usePrompt(item.dataset.prompt);
+        });
+      });
     });
 
     function loadNewDevotional() {

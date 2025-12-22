@@ -519,7 +519,7 @@
     <div class="hero-content">
       <h1>Your Journey of Faith</h1>
       <p>A sacred space for reflection, connection, and spiritual growth. Walk with God through every season of life.</p>
-      <button class="primary" onclick="scrollToSection('journal')">Begin Your Journey</button>
+      <button class="primary" id="begin-journey-btn">Begin Your Journey</button>
     </div>
   </section>
 
@@ -638,22 +638,22 @@
         <h3>Guided Prompts</h3>
         <p>Not sure where to start? Try one of these reflections:</p>
         <ul class="prompt-list">
-          <li class="prompt-item" onclick="usePrompt('What am I grateful for today, even in the hard things?')">
+          <li class="prompt-item" data-prompt="What am I grateful for today, even in the hard things?">
             What am I grateful for today, even in the hard things?
           </li>
-          <li class="prompt-item" onclick="usePrompt('Where do I feel God\'s presence right now? Where do I feel His absence?')">
+          <li class="prompt-item" data-prompt="Where do I feel God's presence right now? Where do I feel His absence?">
             Where do I feel God's presence right now? Where do I feel His absence?
           </li>
-          <li class="prompt-item" onclick="usePrompt('What fear or worry am I carrying that I need to give to God?')">
+          <li class="prompt-item" data-prompt="What fear or worry am I carrying that I need to give to God?">
             What fear or worry am I carrying that I need to give to God?
           </li>
-          <li class="prompt-item" onclick="usePrompt('When have I felt seen and loved by God recently?')">
+          <li class="prompt-item" data-prompt="When have I felt seen and loved by God recently?">
             When have I felt seen and loved by God recently?
           </li>
-          <li class="prompt-item" onclick="usePrompt('What does my soul need most today? Rest? Courage? Hope?')">
+          <li class="prompt-item" data-prompt="What does my soul need most today? Rest? Courage? Hope?">
             What does my soul need most today? Rest? Courage? Hope?
           </li>
-          <li class="prompt-item" onclick="usePrompt('How have I experienced God\'s faithfulness in the past?')">
+          <li class="prompt-item" data-prompt="How have I experienced God's faithfulness in the past?">
             How have I experienced God's faithfulness in the past?
           </li>
         </ul>
@@ -692,7 +692,7 @@
         <p><strong>Today's Invitation:</strong> Bring God the places where you feel most unseen. Name them. He's already there, seeing you with perfect love.</p>
       </div>
       
-      <button onclick="loadNewDevotional()">Load Another Devotional</button>
+      <button id="load-devotional-btn">Load Another Devotional</button>
     </div>
   </div>
 
@@ -742,27 +742,16 @@
         <h3>Share Anonymously</h3>
         <p style="font-size: 0.9rem; margin-bottom: 1rem;">Share an insight, prayer request, or word of encouragement with others walking this journey.</p>
         <textarea id="community-share" rows="4" placeholder="What's God teaching you? What do you need prayer for?"></textarea>
-        <button onclick="shareToCommunity()" class="primary" style="margin-top: 1rem;">Share Anonymously</button>
-        <p style="font-size: 0.8rem; color: var(--earth-light); margin-top: 0.5rem; font-style: italic;">Note: This is a demo. In a full version, this would post to a moderated community space.</p>
+        <button id="share-community-btn" class="primary" style="margin-top: 1rem;">Share Anonymously</button>
+        <div id="share-feedback" style="font-size: 0.85rem; margin-top: 0.5rem; font-style: italic;"></div>
       </div>
       
       <div class="card">
         <h3>Community Insights</h3>
         <p style="font-size: 0.9rem; margin-bottom: 1rem;">Encouragement from others on the journey:</p>
         
-        <div class="community-post">
-          <p>"I felt so alone in my struggles with anxiety until I started journaling here. Realizing that Hannah, David, and even Jesus felt deep distress helps me feel less broken. I'm learning that honest faith is stronger than fake peace."</p>
-          <p style="font-size: 0.85rem; color: var(--earth-light); margin-top: 0.5rem;">— Anonymous, 2 days ago</p>
-        </div>
-        
-        <div class="community-post">
-          <p>"The story of Hagar changed everything for me. 'The God who sees'—I needed that today. Feeling invisible has been my biggest struggle, but knowing God sees me even when people don't... that's everything."</p>
-          <p style="font-size: 0.85rem; color: var(--earth-light); margin-top: 0.5rem;">— Anonymous, 1 week ago</p>
-        </div>
-        
-        <div class="community-post">
-          <p>"I've been using the guided prompts when I don't know what to write. It's helping me be more honest with God instead of just saying what I think I should say."</p>
-          <p style="font-size: 0.85rem; color: var(--earth-light); margin-top: 0.5rem;">— Anonymous, 3 days ago</p>
+        <div id="community-posts">
+          <p style="text-align: center; color: var(--earth-light); padding: 2rem;">Loading community posts...</p>
         </div>
       </div>
       
@@ -813,7 +802,7 @@
           <p style="font-size: 1.5rem; color: var(--earth-medium); font-family: 'Cormorant Garamond', serif; margin-bottom: 1rem;" id="breath-text">Breathe in: "Be still"</p>
           <p style="font-size: 1.5rem; color: var(--earth-medium); font-family: 'Cormorant Garamond', serif;">Breathe out: "And know"</p>
         </div>
-        <button onclick="startBreathPrayer()" style="margin-top: 1rem;">Start Guided Breathing</button>
+        <button id="start-breath-prayer-btn" style="margin-top: 1rem;">Start Guided Breathing</button>
       </div>
       
       <div class="card">
@@ -824,7 +813,7 @@
           <p class="scripture-ref" id="meditation-ref">Psalm 23:1</p>
         </div>
         <p style="margin-top: 1rem; font-size: 0.95rem;">Read this verse slowly three times. What word or phrase stands out to you?</p>
-        <button onclick="loadMeditationVerse()" style="margin-top: 1rem;">New Meditation Verse</button>
+        <button id="load-meditation-btn" style="margin-top: 1rem;">New Meditation Verse</button>
       </div>
       
       <div class="card">
@@ -833,7 +822,7 @@
         <textarea id="gratitude-list" rows="4" placeholder="1. 
 2. 
 3." style="margin-top: 1rem;"></textarea>
-        <button onclick="saveGratitude()" class="primary" style="margin-top: 1rem;">Save to Heart</button>
+        <button id="save-gratitude-btn" class="primary" style="margin-top: 1rem;">Save to Heart</button>
       </div>
       
     </div>
@@ -1070,11 +1059,143 @@
 
     function shareToCommunity() {
       const shareText = document.getElementById('community-share');
+      const feedback = document.getElementById('share-feedback');
+      
       if (shareText && shareText.value.trim()) {
-        alert('Thank you for sharing! In a full version, this would post to a moderated community feed.');
-        shareText.value = '';
+        const content = shareText.value.trim();
+        
+        // Show loading state
+        feedback.textContent = 'Submitting...';
+        feedback.style.color = 'var(--earth-light)';
+        
+        // Submit to backend
+        fetch('/api/posts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ content })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            shareText.value = '';
+            feedback.textContent = data.message;
+            feedback.style.color = 'var(--sage)';
+            
+            // Reload community posts after a short delay
+            setTimeout(() => {
+              loadCommunityPosts();
+            }, 1000);
+          } else {
+            feedback.textContent = 'Error: ' + (data.error || 'Submission failed');
+            feedback.style.color = 'var(--terracotta)';
+          }
+        })
+        .catch(error => {
+          feedback.textContent = 'Network error. Please try again.';
+          feedback.style.color = 'var(--terracotta)';
+          console.error('Error submitting post:', error);
+        });
       }
     }
+
+    // Load community posts from backend
+    function loadCommunityPosts() {
+      const container = document.getElementById('community-posts');
+      
+      fetch('/api/posts?limit=10')
+        .then(response => response.json())
+        .then(data => {
+          if (data.success && data.posts.length > 0) {
+            container.innerHTML = data.posts.map(post => {
+              const timeAgo = getTimeAgo(new Date(post.timestamp));
+              return `
+                <div class="community-post">
+                  <p>"${escapeHtml(post.content)}"</p>
+                  <p style="font-size: 0.85rem; color: var(--earth-light); margin-top: 0.5rem;">— Anonymous, ${timeAgo}</p>
+                </div>
+              `;
+            }).join('');
+          } else {
+            container.innerHTML = '<p style="text-align: center; color: var(--earth-light); padding: 2rem;">No posts yet. Be the first to share!</p>';
+          }
+        })
+        .catch(error => {
+          console.error('Error loading posts:', error);
+          container.innerHTML = '<p style="text-align: center; color: var(--terracotta); padding: 2rem;">Unable to load posts. Please refresh the page.</p>';
+        });
+    }
+
+    // Helper function to escape HTML
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Helper function to get relative time
+    function getTimeAgo(date) {
+      const seconds = Math.floor((new Date() - date) / 1000);
+      
+      if (seconds < 60) return 'just now';
+      const minutes = Math.floor(seconds / 60);
+      if (minutes < 60) return minutes === 1 ? '1 minute ago' : `${minutes} minutes ago`;
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return hours === 1 ? '1 hour ago' : `${hours} hours ago`;
+      const days = Math.floor(hours / 24);
+      if (days < 7) return days === 1 ? '1 day ago' : `${days} days ago`;
+      const weeks = Math.floor(days / 7);
+      if (weeks < 4) return weeks === 1 ? '1 week ago' : `${weeks} weeks ago`;
+      const months = Math.floor(days / 30);
+      return months === 1 ? '1 month ago' : `${months} months ago`;
+    }
+
+    // Load community posts on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCommunityPosts();
+      
+      // Refresh posts every 30 seconds for real-time sync
+      setInterval(loadCommunityPosts, 30000);
+      
+      // Setup event listeners for buttons
+      const beginJourneyBtn = document.getElementById('begin-journey-btn');
+      if (beginJourneyBtn) {
+        beginJourneyBtn.addEventListener('click', () => scrollToSection('journal'));
+      }
+      
+      const loadDevotionalBtn = document.getElementById('load-devotional-btn');
+      if (loadDevotionalBtn) {
+        loadDevotionalBtn.addEventListener('click', loadNewDevotional);
+      }
+      
+      const shareCommunityBtn = document.getElementById('share-community-btn');
+      if (shareCommunityBtn) {
+        shareCommunityBtn.addEventListener('click', shareToCommunity);
+      }
+      
+      const startBreathPrayerBtn = document.getElementById('start-breath-prayer-btn');
+      if (startBreathPrayerBtn) {
+        startBreathPrayerBtn.addEventListener('click', startBreathPrayer);
+      }
+      
+      const loadMeditationBtn = document.getElementById('load-meditation-btn');
+      if (loadMeditationBtn) {
+        loadMeditationBtn.addEventListener('click', loadMeditationVerse);
+      }
+      
+      const saveGratitudeBtn = document.getElementById('save-gratitude-btn');
+      if (saveGratitudeBtn) {
+        saveGratitudeBtn.addEventListener('click', saveGratitude);
+      }
+      
+      // Setup prompt item click listeners
+      document.querySelectorAll('.prompt-item').forEach(item => {
+        item.addEventListener('click', () => {
+          usePrompt(item.dataset.prompt);
+        });
+      });
+    });
 
     function loadNewDevotional() {
       const devotionals = [

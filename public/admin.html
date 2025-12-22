@@ -146,7 +146,7 @@
         <h1 class="text-2xl font-bold" style="color: var(--earth-medium);">FaithWalk Admin Dashboard</h1>
         <div class="flex gap-4 items-center">
           <span id="admin-username" class="text-sm text-gray-600"></span>
-          <button onclick="logout()" class="btn btn-secondary">Logout</button>
+          <button id="logout-btn" class="btn btn-secondary">Logout</button>
         </div>
       </div>
     </header>
@@ -173,12 +173,12 @@
       </div>
 
       <!-- Tabs -->
-      <div class="flex gap-2 mb-6 border-b">
-        <button onclick="showTab('pending')" class="px-4 py-2 font-medium tab-btn active" data-tab="pending">Pending Posts</button>
-        <button onclick="showTab('approved')" class="px-4 py-2 font-medium tab-btn" data-tab="approved">Approved Posts</button>
-        <button onclick="showTab('rejected')" class="px-4 py-2 font-medium tab-btn" data-tab="rejected">Rejected Posts</button>
-        <button onclick="showTab('filters')" class="px-4 py-2 font-medium tab-btn" data-tab="filters">Word Filters</button>
-        <button onclick="showTab('settings')" class="px-4 py-2 font-medium tab-btn" data-tab="settings">Settings</button>
+      <div class="flex gap-2 mb-6 border-b" id="tab-buttons">
+        <button class="px-4 py-2 font-medium tab-btn active" data-tab="pending">Pending Posts</button>
+        <button class="px-4 py-2 font-medium tab-btn" data-tab="approved">Approved Posts</button>
+        <button class="px-4 py-2 font-medium tab-btn" data-tab="rejected">Rejected Posts</button>
+        <button class="px-4 py-2 font-medium tab-btn" data-tab="filters">Word Filters</button>
+        <button class="px-4 py-2 font-medium tab-btn" data-tab="settings">Settings</button>
       </div>
 
       <!-- Tab Content -->
@@ -281,6 +281,14 @@
       location.reload();
     }
 
+    // Setup logout button event listener
+    document.addEventListener('DOMContentLoaded', () => {
+      const logoutBtn = document.getElementById('logout-btn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', logout);
+      }
+    });
+
     // Load dashboard
     async function loadDashboard() {
       await loadStats();
@@ -317,6 +325,22 @@
 
         if (data.success && data.posts.length > 0) {
           container.innerHTML = data.posts.map(post => createPostCard(post, status)).join('');
+          
+          // Add event delegation for moderate and delete buttons
+          container.querySelectorAll('.moderate-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const postId = parseInt(e.target.dataset.postId);
+              const action = e.target.dataset.action;
+              moderatePost(postId, action);
+            });
+          });
+          
+          container.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const postId = parseInt(e.target.dataset.postId);
+              deletePost(postId);
+            });
+          });
         } else {
           container.innerHTML = '<p class="text-center text-gray-500">No posts found.</p>';
         }
@@ -330,7 +354,7 @@
       const timestamp = new Date(post.timestamp || post.created_at).toLocaleString();
 
       return `
-        <div class="post-card card ${isFlagged ? 'flagged' : ''}">
+        <div class="post-card card ${isFlagged ? 'flagged' : ''}" data-post-id="${post.id}">
           <div class="flex justify-between items-start mb-2">
             <span class="badge badge-${post.approval_status}">${post.approval_status}</span>
             <span class="text-sm text-gray-500">${timestamp}</span>
@@ -339,10 +363,10 @@
           <p class="mb-4">${escapeHtml(post.content)}</p>
           <div class="flex gap-2">
             ${status === 'pending' ? `
-              <button onclick="moderatePost(${post.id}, 'approve')" class="btn btn-success">Approve</button>
-              <button onclick="moderatePost(${post.id}, 'reject')" class="btn btn-danger">Reject</button>
+              <button class="btn btn-success moderate-btn" data-post-id="${post.id}" data-action="approve">Approve</button>
+              <button class="btn btn-danger moderate-btn" data-post-id="${post.id}" data-action="reject">Reject</button>
             ` : ''}
-            <button onclick="deletePost(${post.id})" class="btn btn-danger">Delete</button>
+            <button class="btn btn-danger delete-btn" data-post-id="${post.id}">Delete</button>
           </div>
         </div>
       `;
@@ -420,10 +444,20 @@
       // Load content
       if (tabName === 'filters') {
         loadFilters();
-      } else {
+      } else if (tabName === 'pending' || tabName === 'approved' || tabName === 'rejected') {
         loadPosts(tabName);
       }
     }
+
+    // Setup tab button event listeners
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          showTab(btn.dataset.tab);
+        });
+      });
+    });
 
     async function loadFilters() {
       const container = document.getElementById('filters-list');
@@ -442,9 +476,17 @@
                 <span class="font-medium">${escapeHtml(filter.word)}</span>
                 <span class="ml-4 severity-${filter.severity}">${filter.severity.toUpperCase()}</span>
               </div>
-              <button onclick="deleteFilter(${filter.id})" class="btn btn-danger">Delete</button>
+              <button class="btn btn-danger delete-filter-btn" data-filter-id="${filter.id}">Delete</button>
             </div>
           `).join('');
+          
+          // Add event listeners for delete filter buttons
+          container.querySelectorAll('.delete-filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const filterId = parseInt(e.target.dataset.filterId);
+              deleteFilter(filterId);
+            });
+          });
         } else {
           container.innerHTML = '<p class="text-center text-gray-500">No filters found.</p>';
         }
