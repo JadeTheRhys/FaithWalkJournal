@@ -62,8 +62,27 @@ function generateToken(username) {
  */
 function verifyAndDecodeToken(token) {
   try {
-    return jwt.verify(token, JWT_SECRET);
+    // Use verify with ignoreExpiration to allow refresh of recently expired tokens
+    // but still validate signature and structure
+    const decoded = jwt.verify(token, JWT_SECRET, { ignoreExpiration: true });
+    
+    // Check if token is not too old to refresh (max 24 hours past expiration)
+    const now = Math.floor(Date.now() / 1000);
+    const maxRefreshAge = 24 * 60 * 60; // 24 hours in seconds
+    
+    if (decoded.exp && (now - decoded.exp) > maxRefreshAge) {
+      console.warn('Token refresh rejected: token too old');
+      return null;
+    }
+    
+    return decoded;
   } catch (error) {
+    // Log security-relevant errors
+    if (error.name === 'JsonWebTokenError') {
+      console.error('Token verification failed: Invalid token structure or signature');
+    } else if (error.name !== 'TokenExpiredError') {
+      console.error('Token verification error:', error.message);
+    }
     return null;
   }
 }
