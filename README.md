@@ -74,6 +74,24 @@ The application will be available at:
 - Check the terminal for "FaithWalk Journal server running on port 3000"
 - See `START_SERVER.md` or `MODERATION_GUIDE.md` for detailed troubleshooting
 
+**"Invalid or expired token" errors in Admin Dashboard?**
+- This has been fixed! The app now automatically refreshes tokens
+- Sessions last 8 hours and refresh automatically while you're active
+- If you see this message, it means your session truly expired - just log in again
+- See the "Authentication & Session Management" section below for details
+
+**Network errors when sharing posts?**
+- The app now automatically retries failed requests
+- Check your internet connection
+- Make sure the server is running
+- Try refreshing the page
+
+**Community posts not loading?**
+- The app will automatically retry loading posts
+- Check that the server is running
+- Try refreshing the page
+- Clear your browser cache if problems persist
+
 ## API Endpoints
 
 ### Public Endpoints
@@ -132,6 +150,30 @@ Content-Type: application/json
 {
   "username": "admin",
   "password": "changeme123"
+}
+```
+
+Response:
+```json
+{
+  "success": true,
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "username": "admin"
+}
+```
+
+#### Refresh Token
+```
+POST /api/admin/refresh-token
+Authorization: Bearer <old-token>
+```
+
+Response:
+```json
+{
+  "success": true,
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "username": "admin"
 }
 ```
 
@@ -231,9 +273,46 @@ Authorization: Bearer <token>
 3. **Rate Limiting**: 
    - General API: 100 requests per 15 minutes per IP
    - Post submissions: 10 per hour per IP
-4. **Authentication**: JWT-based authentication for admin routes
-5. **Database**: SQLite with WAL mode for better concurrency
-6. **HTTPS**: Use HTTPS in production (configure reverse proxy)
+4. **Authentication**: JWT-based authentication for admin routes with automatic token refresh
+5. **Session Management**: 
+   - Tokens expire after 8 hours
+   - Automatic token refresh when nearing expiration
+   - Tokens refresh at 30 minutes before expiry when admin is active
+6. **Error Handling**:
+   - Automatic retry logic for network failures (up to 3 retries with exponential backoff)
+   - Clear error messages for users
+   - Graceful handling of expired tokens
+7. **Database**: SQLite with WAL mode for better concurrency
+8. **HTTPS**: Use HTTPS in production (configure reverse proxy)
+
+## Authentication & Session Management
+
+### How It Works
+The application uses JWT (JSON Web Tokens) for authentication with these features:
+
+- **Token Lifetime**: 8 hours from login
+- **Automatic Refresh**: Tokens automatically refresh when you're within 30 minutes of expiration
+- **Background Refresh**: The system checks for refresh needs on every admin API call
+- **Retry Logic**: Failed requests automatically retry with exponential backoff
+- **Session Recovery**: If a token expires, you'll be prompted to log in again
+
+### For Users
+You don't need to do anything special! The app handles everything automatically:
+- Log in once and the session stays active while you work
+- The app will warn you if your session is about to expire
+- If you're idle for more than 8 hours, you'll need to log in again
+- All your work is saved - logging in again won't lose any data
+
+### For Developers
+The token refresh system:
+1. Server sends `X-Token-Refresh-Needed` header when token has <30 min left
+2. Client automatically calls `/api/admin/refresh-token` endpoint
+3. New token is issued and stored, replacing the old one
+4. If refresh fails (e.g., token fully expired), user is prompted to log in
+5. All authenticated requests use the `authenticatedFetch()` wrapper that handles:
+   - Automatic token refresh on 401 errors
+   - Retry logic with exponential backoff
+   - Proper error handling and user feedback
 
 ## Production Deployment
 
