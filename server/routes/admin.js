@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const db = require('../db/database');
-const { authenticateAdmin, generateToken } = require('../middleware/auth');
+const { authenticateAdmin, generateToken, verifyAndDecodeToken } = require('../middleware/auth');
 
 /**
  * POST /api/admin/login - Admin login
@@ -37,6 +37,45 @@ router.post('/login', async (req, res) => {
   } catch (error) {
     console.error('Error during login:', error);
     res.status(500).json({ error: 'Login failed' });
+  }
+});
+
+/**
+ * POST /api/admin/refresh-token - Refresh JWT token
+ */
+router.post('/refresh-token', (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Token required', tokenExpired: true });
+    }
+
+    const oldToken = authHeader.substring(7);
+    const decoded = verifyAndDecodeToken(oldToken);
+    
+    if (!decoded) {
+      return res.status(401).json({ error: 'Invalid or expired token', tokenExpired: true });
+    }
+
+    // Verify user still exists
+    const user = db.prepare('SELECT username FROM admin_users WHERE username = ?').get(decoded.username);
+    
+    if (!user) {
+      return res.status(401).json({ error: 'User not found', tokenExpired: true });
+    }
+
+    // Generate new token
+    const newToken = generateToken(decoded.username);
+
+    res.json({
+      success: true,
+      token: newToken,
+      username: decoded.username
+    });
+  } catch (error) {
+    console.error('Error refreshing token:', error);
+    res.status(500).json({ error: 'Token refresh failed' });
   }
 });
 
